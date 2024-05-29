@@ -1,0 +1,60 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Template</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="StyleSheet1.css">
+
+</head>
+<body>
+
+    <div class="topnav">
+        <a href="HtmlPage1.html">Home</a>
+        <a class="active" href="HtmlPage2.html">Projects</a>
+        <a href="HtmlPage3.html">Inventory</a>
+        <a href="HtmlPage4.html">Add Project</a>
+        <div class="search-container">
+            <form action="/action_page.php">
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Header -->
+
+
+    <form action="/p2" , method="POST">
+
+        <div class="row">
+
+            <div class="main1">
+                <h2>Current Projects: </h2>
+            </div>
+
+            <div class="main2">
+
+                <p>{{projects}}<br><br></p>
+
+            </div>
+
+        </div>
+
+    </form>
+
+
+
+
+    <!-- Footer -->
+    <div class="footer">
+        <h5>Created by Web Base</h5>
+    </div>
+
+    </footer>
+
+
+
+</body>
+</html>
