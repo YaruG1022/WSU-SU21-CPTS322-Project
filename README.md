@@ -89,7 +89,7 @@ Provide steps to reproduce the problem and/or name a file or a function where th
 We welcome contributions from the community! Follow these steps to contribute:
 
 For more detailed documentation, refer to the following files:
-- [Sprint Reports]([docs/sprint_reports.md](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/tree/207cccf6f9f5f89019f01688a4087f6f27e2f1c8/Sprint_Reports))
+- [Sprint Reports](Sprint_Reports)
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE.txt]([LICENSE.txt](https://choosealicense.com/licenses/mit/)) file for details.
+This project is licensed under the MIT License. See the [LICENSE.txt](LICENSE.txt) file for details.
