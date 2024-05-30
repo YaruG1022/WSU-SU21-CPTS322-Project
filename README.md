@@ -73,11 +73,10 @@ To use the Acme Food Bank Inventory Tracking System, follow these steps:
 
 ## Known Problems
 
-TODO: Describe any known issues, bugs, odd behaviors or code smells. 
-Provide steps to reproduce the problem and/or name a file or a function where the problem lives.
-
+For an up-to-date list of known issues, please refer to the [GitHub Issues Board]([https://github.com/your-username/acme-food-bank-inventory/issues](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues)). If you encounter a new issue, please open a new issue on our GitHub Issues Board, providing as much detail as possible to help us diagnose and fix the problem.
 
 ## Contributing
+We welcome contributions from the community! Follow these steps to contribute:
 
 1. Fork it!
 2. Create your feature branch: `git checkout -b my-new-feature`
@@ -86,7 +85,6 @@ Provide steps to reproduce the problem and/or name a file or a function where th
 5. Submit a pull request :D
 
 ## Additional Documentation
-We welcome contributions from the community! Follow these steps to contribute:
 
 For more detailed documentation, refer to the following files:
 - [Sprint Reports](Sprint_Reports)
