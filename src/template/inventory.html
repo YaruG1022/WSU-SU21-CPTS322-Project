@@ -1,0 +1,93 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="StyleSheet1.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+<body>
+
+    <div class="topnav">
+        <a href="homepage.html">Home</a>
+        <a class="active" href="inventory.html">Inventory</a>
+        <a href="donation.html">Donation</a>
+        <a href="transaction.html">Order Now</a>
+        <div class="search-container" style="float: left;">
+            <form action="/action_page.php">
+                <input type="text" placeholder="Search.." name="search">
+                <button type="submit"><i class="fa fa-search"></i></button>
+            </form>
+        </div>
+        <a href="UserAccount.html" style="float: right; padding: 14px 16px;">
+            <i class="fa fa-user"></i> Log In
+        </a>
+        <a href="report.html" style="float: right; padding: 14px 16px;" title="Generate report"><i class="fa fa-file"></i></a>
+    </div>
+
+    <div class="main">
+        <div class="inventory-buttons">
+            <button class="fa fa-plus"><alt="Add"> Add</button>
+            <button class="fa fa-edit"><alt="Update"> Update</button>
+            <button class="fa fa-remove"><alt="Delete"> Delete</button>
+            <a href="report.html" style="float: center; padding: 14px 16px;" title="Generate report"><i class="fa fa-file"></i></a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>DATE ADDED</th>
+                    <th>USABLE UNTIL</th>
+                    <th>STATUS</th>
+                    <th>ITEMS</th>
+                    <th>RECIPIENT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
+                    <td>05/30/2024 15:47</td>
+                    <td>---</td>
+                    <td>N/A</td>
+                    <td><a href="#" class="order-link">ID</a> Description<br> Description</td>
+                    <td>Name<br>Address</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
+                    <td>05/30/2024 15:47</td>
+                    <td>---</td>
+                    <td>N/A</td>
+                    <td><a href="#" class="order-link">ID</a> Description</td>
+                    <td>Name<br>Address</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
+                    <td>05/30/2024 15:47</td>
+                    <td>---</td>
+                    <td>N/A</td>
+                    <td><a href="#" class="order-link">ID</a> Description</td>
+                    <td>Name<br>Address</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
+                    <td>05/30/2024 15:47</td>
+                    <td>---</td>
+                    <td>N/A</td>
+                    <td><a href="#" class="order-link">ID</a> Description</td>
+                    <td>Name<br>Address</td>
+                </tr>
+
+            
+            </tbody>
+        </table>
+    </div>
+
+</body>
+</html>
