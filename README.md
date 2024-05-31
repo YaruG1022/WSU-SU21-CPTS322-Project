@@ -73,7 +73,7 @@ To use the Acme Food Bank Inventory Tracking System, follow these steps:
 
 ## Known Problems
 
-For an up-to-date list of known issues, please refer to the [GitHub Issues Board]([https://github.com/your-username/acme-food-bank-inventory/issues](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues)). If you encounter a new issue, please open a new issue on our GitHub Issues Board, providing as much detail as possible to help us diagnose and fix the problem.
+For an up-to-date list of known issues, please refer to the [GitHub Issues Board](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues). If you encounter a new issue, please open a new issue on our GitHub Issues Board, providing as much detail as possible to help us diagnose and fix the problem.
 
 ## Contributing
 We welcome contributions from the community! Follow these steps to contribute:
