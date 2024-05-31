@@ -19,7 +19,7 @@ create_db()
 
 @app.route("/")
 def index():
-    return "<p>Flask is working</p>"
+    return render_template("index.html")
 
 @app.route("/item_form")
 def additem_test_form():
