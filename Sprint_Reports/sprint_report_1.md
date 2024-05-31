@@ -19,8 +19,8 @@ Here are links to the issues that we completed in this sprint:
  
  ## Incomplete Issues/User Stories
  Here are links to issues we worked on but did not complete in this sprint:
- 
- * [TODO](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/3) <<We designated this issue as the final task to be completed at the end of the project.>>
+ We set this issue as the final task to be completed at the end of the project
+ * [TODO](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/3) <<We designated this issue as the final task to be completed at the end of the project,.>>
  * [Develop a complete HTML interface](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/2) <<We found that providing a complete UI for the whole project was a much bigger task than expected, which could not be completed by the deadline of Sprint 1.>>
 
 ## Code Files for Review
