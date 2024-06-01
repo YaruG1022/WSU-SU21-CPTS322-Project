@@ -1,4 +1,4 @@
-# Sprint x Report (5/17/24 - 5/31/2024)
+# Sprint 1 Report (5/17/24 - 5/31/2024)
 
 ## What's New (User Facing)
  * User Interface Update: Developed HTML-based web pages including homepage, inventory management page, and donation page. 
