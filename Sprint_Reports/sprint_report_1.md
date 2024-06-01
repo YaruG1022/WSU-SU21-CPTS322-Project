@@ -29,6 +29,8 @@ Please review the following code files, which were actively developed during thi
  * [interface/src/template](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/tree/2ade5d95e441eb082bc0703f712d611479a3f86c/src/template)
  
 ## Retrospective Summary
+In this sprint, we made significant progress by building a multi-page website and setting up a basic operational backend. We also identified areas for enhancement, particularly in making our website more interactive and functional. Going forward, we aim to integrate our frontend and backend components, implement authentication processes, and extend our database to store various types of information.
+
 Here's what went well:
   * Successfully created a multi-page web template featuring a descent design.
   * Established and tested a foundational database and basic operational functionality.
@@ -42,3 +44,6 @@ Here are changes we plan to implement in the next sprint:
    * Integrate Flask to bridge the backend functionality with the frontend, enhancing the application's functionality beyond static displays to interactive, operational features.
    * Implement modal pop-up windows for user authentication, enabling login and registration functionalities that interact with backend processes.
    * Expand SQL database architecture to include diverse data types such as user account details, inventory, donations, and transaction records
+   * Develop and refine the login system, and establish a backup system for data integrity and recovery.
+   * Develop a security system by implementing two-factor authentication (2FA) and Transport Layer Security (TLS) protocols.
+
