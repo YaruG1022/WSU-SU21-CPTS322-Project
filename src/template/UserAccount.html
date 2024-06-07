@@ -1,74 +1,106 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Template</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Account</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="StyleSheet1.css">
-    <script src="jquery-3.7.1.min.js"></script>
-    <script src="navbar.js"></script>
-
 </head>
-
-<script>
-    function myFunction() {
-        var mcost = 0;
-        document.getElementById("cost").innerHTML = mcost;
-    }
-</script>
-
-<body onload="myFunction()">
-
+<body>
     <div id="navbar"></div>
     <script>
-      document.getElementById('navbar').innerHTML = generateNavbar();
+        document.getElementById('navbar').innerHTML = generateNavbar();
     </script>
     
-    <!--Notice: action="/action_page.php" sends the form-data to a file named "action_page.php", change "/action_page.php" to the targeted python file.-->
-    <form action="/action_page.php" method="get">
-        <div class="container">
-            <h1>Add your project: </h1>
-            <p>Please fill in this form to create a project.</p>
-            <hr>
-
-            <label for="name"><b>Project Name</b></label>
-            <input type="pname" placeholder="Enter a project name" name="name" id="name" required>
-
-            <label for="type"><b>Project Type</b></label>
-            <input type="ptype" placeholder="Enter the type of your project" name="type" id="type" required>
-
-
-            <label for="material"><b>Select your materials: </b></label>
-            <select name="meterial" id="material2">
-                <option value="material1" name="m1" id="m1">material1</option>
-                <option value="material2" name="m2" id="m2">material2</option>
-                <option value="material3" name="m3" id="m3">material3</option>
-                <option value="material4" name="m4" id="m4">material4</option>
-            </select>
-
-            <label for="cost"><b>Material cost: </b></label>
-            <output id="cost" for="cost" , disabled></output>
-
-
-            <hr />
-
-            <button type="submit" class="create">Create Project</button>
+    <div class="user-account">
+        <h1>User Account</h1>
+        <div class="user-info">
+            <div class="avatar" id="userAvatar">
+                <i class="fa fa-user"></i>
+            </div>
+            <form id="avatarForm">
+                <label for="avatarUpload">Change Avatar:</label>
+                <input type="file" id="avatarUpload" name="avatarUpload">
+                <button type="submit">Upload</button>
+            </form>
+            <ul class="user-details">
+                <li>Name: <span class="editable" id="username">YG</span></li>
+                <li>Account Number: <span class="editable" id="accountNumber">123456</span></li>
+                <li>Password: <span class="editable" id="password">********</span></li>
+                <li>Identity: <span class="editable" id="identity">Staff</span></li>
+            </ul>
+            <button id="saveBtn">Save</button>
         </div>
-
-
-    </form>
-
-
-
-    <!-- Footer -->
-    <div class="footer">
-        <h5>Created by T-Nine</h5>
     </div>
 
-    </footer>
+    <script src="jquery-3.7.1.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        function makeEditable(span) {
+            span.addEventListener('click', function() {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = span.textContent;
+                input.className = 'edit-input';
+                span.parentNode.replaceChild(input, span);
+                input.focus();
 
+                function revertToSpan() {
+                    const newSpan = document.createElement('span');
+                    newSpan.className = 'editable';
+                    newSpan.id = span.id;
+                    newSpan.textContent = input.value;
+                    input.parentNode.replaceChild(newSpan, input);
+                    makeEditable(newSpan);  // Reapply the event listener
+                }
 
+                input.addEventListener('blur', revertToSpan);
+                document.getElementById('saveBtn').addEventListener('click', function() {
+                    revertToSpan();
+                }, { once: true });
+            });
+        }
 
+        document.querySelectorAll('.editable').forEach(makeEditable);
+
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            // Save changes (e.g., send to server, update UI)
+            const userInfo = {};
+            document.querySelectorAll('.editable').forEach(item => {
+                userInfo[item.id] = item.textContent;
+            });
+            console.log('Saved user info:', userInfo);
+            alert('User information saved successfully!');
+        });
+
+        document.getElementById('avatarForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Handle avatar upload (e.g., send to server, update UI)
+            const avatarUpload = document.getElementById('avatarUpload').files[0];
+            if (avatarUpload) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatarElement = document.getElementById('userAvatar');
+                    avatarElement.innerHTML = `<img src="${e.target.result}" alt="User Avatar" class="avatar-image">`;
+                }
+                reader.readAsDataURL(avatarUpload);
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = event.target.closest('.editable') || event.target.closest('.edit-input');
+            if (!isClickInside) {
+                document.querySelectorAll('.edit-input').forEach(input => {
+                    const span = document.createElement('span');
+                    span.className = 'editable';
+                    span.id = input.id;
+                    span.textContent = input.value;
+                    input.parentNode.replaceChild(span, input);
+                    makeEditable(span);
+                });
+            }
+        });
+    </script>
 </body>
 </html>

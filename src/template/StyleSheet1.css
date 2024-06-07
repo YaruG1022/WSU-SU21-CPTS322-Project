@@ -127,60 +127,8 @@ body {
 
 
 
-/* Add padding to containers */
-.container {
-    padding: 16px;
-    background-color: white;
-    width: 50%;
-    margin-left: 325px;
-    margin-right:300px;
-  
-}
 
-    /* Full-width input fields */
-
-    .container input[type=pname], input[type=ptype], output[id=cost] {
-        width: 100%;
-        padding: 15px;
-        margin: 5px 0 22px 0;
-        display: inline-block;
-        border: none;
-        background: #f1f1f1;
-    }
-
-    .container input[type=pname], input[type=ptype], output[id=cost] {
-        background-color: #ddd;
-        outline: none;
-    }
-
-/* Overwrite default styles of hr */
-hr {
-    border: 1px solid #f1f1f1;
-    margin-bottom: 25px;
-}
-
-/* Set a style for the submit button */
-.create {
-    background-color: dodgerblue;
-    color: white;
-    padding: 16px 20px;
-    margin: 8px 0;
-    border: none;
-    cursor: pointer;
-    width: 100%;
-    opacity: 0.9;
-}
-
-    .create:hover {
-        opacity: 1;
-    }
-
-/* Add a blue text color to links */
-a {
-    color: black;
-}
-
-
+/*================================================================*/
 
 select {
     width: 100%;
@@ -261,12 +209,86 @@ tr:hover {
 
 
 
+.transaction-buttons {
+    width: 90%;
+    border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    font: Arial;
+
+}
+.transaction-buttons button {
+    background-color: #ddd;
+    border: 1px solid gray;
+    color: black;
+    padding: 10px 20px;
+    margin-right: 2px;
+    margin-left: 2px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 4px;
+}
+.transaction-buttons button.disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+.inventory-buttons button img {
+    vertical-align: middle;
+    margin-right: 5px;
+}
+
+
+
 .account-button {
     float: right; 
     padding: 14px 16px;
 }
 
 
+.collapsible {
+    background-color: #f1f1f1;
+    color: black;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+.active, .collapsible:hover {
+    background-color: #ccc;
+}
+.collapsible-content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f9f9f9;
+}
+
+.collapsible {
+    background-color: #f1f1f1;
+    color: black;
+    cursor: pointer;
+    padding: 10px;
+    width: 100%;
+    border: none;
+    text-align: left;
+    outline: none;
+    font-size: 15px;
+}
+.active, .collapsible:hover {
+    background-color: #ccc;
+}
+.collapsible-content {
+    padding: 0 18px;
+    display: none;
+    overflow: hidden;
+    background-color: #f9f9f9;
+}
+/*-------------------------------------------------------------------*/
 
 /* Modal Styles */
 .modal {
@@ -343,3 +365,310 @@ tr:hover {
 .modal-content h2 {
     margin-top: 0;
 }
+
+
+
+/*------------------------------------------------------------*/
+/* User Account Page Styles */
+
+.user-account {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.user-account h1 {
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.avatar {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    background-color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+    overflow: hidden;
+
+}
+
+.avatar i {
+    font-size: 100px;
+    color: #fff;
+}
+
+.avatar img.avatar-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    
+}
+
+.user-info ul.user-details {
+    list-style-type: none;
+    padding: 0;
+    background-color: #fff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    display: inline-block;
+    text-align: left;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.user-info ul.user-details li {
+    font-size: 18px;
+    margin: 10px 0;
+    color: #666;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-info ul.user-details li span.editable {
+    cursor: pointer;
+}
+
+.user-info ul.user-details li input.edit-input {
+    width: 100%;
+    padding: 10px;
+    font-size: 18px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #fff;
+    color: #666;
+}
+
+.user-info form {
+    margin-bottom: 20px;
+}
+
+.user-info button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #4CAF50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.user-info button:hover {
+    background-color: #45a049;
+}
+
+
+
+
+
+/*----------------------------------------------------------------*/
+
+/* Add padding to containers */
+.report-container {
+    padding: 16px;
+    background-color: white;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Full-width input fields */
+.report-container input[type=pname], input[type=ptype], output[id=cost] {
+    width: 100%;
+    padding: 15px;
+    margin: 5px 0 22px 0;
+    display: inline-block;
+    border: none;
+    background: #f1f1f1;
+}
+
+.report-container input[type=pname], input[type=ptype], output[id=cost] {
+    background-color: #ddd;
+    outline: none;
+}
+
+/* Overwrite default styles of hr */
+.report-container hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+/* Style for buttons */
+.report-button {
+    background-color: #1abc9c;
+    color: white;
+    padding: 10px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+}
+
+.report-button:hover {
+    background-color: #16a085;
+}
+
+/* Style for search bar */
+.report-search {
+    padding: 10px;
+    margin-top: 8px;
+    font-size: 17px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: calc(100% - 44px);
+}
+
+.report-search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.report-search-container button {
+    margin-left: 8px;
+}
+
+/* Style for select elements */
+.report-select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+/* Table styles */
+.report-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.report-container th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.report-container th {
+    background-color: #f2f2f2;
+}
+
+.report-container tr:hover {
+    background-color: #f5f5f5;
+}
+
+
+
+/* =================================================================*/
+
+/* Add padding to containers */
+.donation-container {
+    padding: 16px;
+    background-color: white;
+    width: 50%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+    /* Full-width input fields */
+    .donation-container input[type=pname], input[type=ptype], output[id=cost] {
+        width: 100%;
+        padding: 15px;
+        margin: 5px 0 22px 0;
+        display: inline-block;
+        border: none;
+        background: #f1f1f1;
+    }
+
+    .donation-container input[type=pname], input[type=ptype], output[id=cost] {
+        background-color: #ddd;
+        outline: none;
+    }
+
+/* Overwrite default styles of hr */
+.donation-container hr {
+    border: 1px solid #f1f1f1;
+    margin-bottom: 25px;
+}
+
+/* Style for buttons */
+.donation-create {
+    background-color: dodgerblue;
+    color: white;
+    padding: 16px 20px;
+    margin: 8px 0;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    opacity: 0.9;
+}
+
+    .donation-create:hover {
+        opacity: 1;
+    }
+
+/* Table styles */
+.donation-container table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.donation-container th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+}
+
+.donation-container th {
+    background-color: #f2f2f2;
+}
+
+.donation-container tr:hover {
+    background-color: #f5f5f5;
+}
+
+/* Specific styles for recent donations */
+.donation-table {
+    margin-top: 20px;
+}
+
+.donation-table th, .donation-table td {
+    text-align: left;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+.donation-table th {
+    background-color: #f2f2f2;
+}
+
+.donation-table tr:hover {
+    background-color: #f5f5f5;
+}
+
+
+

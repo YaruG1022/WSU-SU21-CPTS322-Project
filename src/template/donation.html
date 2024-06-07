@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="StyleSheet1.css">
     <script src="jquery-3.7.1.min.js"></script>
     <script src="navbar.js"></script>
-
 </head>
 
 <script>
@@ -16,18 +15,41 @@
         var mcost = 0;
         document.getElementById("cost").innerHTML = mcost;
     }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        loadDonations();
+    });
+
+    function loadDonations() {
+        fetch('/getRecentDonations')  // Update this endpoint to match your server configuration
+            .then(response => response.json())
+            .then(data => {
+                const tableBody = document.getElementById('donationTableBody');
+                data.forEach(donation => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${donation.projectName}</td>
+                        <td>${donation.projectType}</td>
+                        <td>${donation.donator}</td>
+                        <td>${donation.items}</td>
+                        <td>${donation.date}</td>
+                    `;
+                    tableBody.appendChild(row);
+                });
+            });
+    }
 </script>
 
 <body onload="myFunction()">
 
     <div id="navbar"></div>
     <script>
-      document.getElementById('navbar').innerHTML = generateNavbar();
+        document.getElementById('navbar').innerHTML = generateNavbar();
     </script>
     
     <!--Notice: action="/action_page.php" sends the form-data to a file named "action_page.php", change "/action_page.php" to the targeted python file.-->
     <form action="/action_page.php" method="get">
-        <div class="container">
+        <div class="donation-container">
             <h1>Donate: </h1>
             <p>Please fill in this form to add your donation.</p>
             <hr>
@@ -38,33 +60,40 @@
             <label for="type"><b>Project Type</b></label>
             <input type="ptype" placeholder="Enter the type of your project" name="type" id="type" required>
 
-
             <label for="material"><b>Select your materials: </b></label>
-            <select name="meterial" id="material2">
-                <option value="material1" name="m1" id="m1">material1</option>
-                <option value="material2" name="m2" id="m2">material2</option>
-                <option value="material3" name="m3" id="m3">material3</option>
-                <option value="material4" name="m4" id="m4">material4</option>
+            <select name="material" id="material2" required>
+                <option value="material1" id="m1">material1</option>
+                <option value="material2" id="m2">material2</option>
+                <option value="material3" id="m3">material3</option>
+                <option value="material4" id="m4">material4</option>
             </select>
 
             <label for="cost"><b>Material cost: </b></label>
-            <output id="cost" for="cost" , disabled></output>
-
+            <output id="cost" name="cost" disabled></output>
 
             <hr />
 
             <button type="submit" class="create">Add Donation</button>
         </div>
-
-
     </form>
 
-
-
-
-    </footer>
-
-
+    <div class="donation-container">
+        <h1>Recent Donations</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Project Name</th>
+                    <th>Type</th>
+                    <th>Donator</th>
+                    <th>Items</th>
+                    <th>Date</th>
+                </tr>
+            </thead>
+            <tbody id="donationTableBody">
+                <!-- Recent donations will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
 
 </body>
 </html>

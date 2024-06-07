@@ -27,7 +27,7 @@ function generateNavbar() {
           <div class="modal-content">
               <span class="close">&times;</span>
               <h2>Login</h2>
-              <form>
+              <form id="loginForm">
                   <label for="username">Username:</label>
                   <input type="text" id="username" name="username"><br><br>
                   <label for="password">Password:</label>
@@ -42,7 +42,7 @@ function generateNavbar() {
           <div class="modal-content">
               <span class="close">&times;</span>
               <h2>Sign Up</h2>
-              <form>
+              <form id="signupForm">
                   <label for="newUsername">Username:</label>
                   <input type="text" id="newUsername" name="newUsername"><br><br>
                   <label for="newPassword">Password:</label>
@@ -98,4 +98,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
         signupModal.style.display = "none";
       }
     }
+
+    // Add form submission handlers
+    document.getElementById('loginForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        window.location.href = 'UserAccount.html';
+    });
+
+    document.getElementById('signupForm').addEventListener('submit', function(event) {
+        event.preventDefault();
+        window.location.href = 'UserAccount.html';
+    });
 });
