@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, url_for, make_response, redir
 from markupsafe import escape
 from datetime import datetime
 from models import *
+from flask_login import LoginManager
 import os
 
 app = Flask(__name__) # create flask app
@@ -9,6 +10,15 @@ app = Flask(__name__) # create flask app
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
 db.init_app(app)
+
+## Login manager
+login_manager = LoginManager()
+login_manager.login_view = 'auth.login'
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
 
 # database creation function
 def create_db():
