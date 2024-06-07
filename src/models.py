@@ -19,5 +19,27 @@ def addItem(item_name, item_quantity, item_stockdate, item_expdate):
 
     db.session.commit()
 
-def getItemList():
+def getAllItems():
     return Item.query.all()
+
+def getItemByID(item_id):
+    return Item.query.filter_by(id = item_id).first()
+    #return Item.query.all()
+  
+def deleteItemByID(item_id):
+    if(getItemByID(id) is None):
+        return False
+    else:
+        Item.query.filter(id = item_id).delete()
+        db.session.commit()
+        return True
+    
+def setItemQuantity(item_id, quantity):
+    if(getItemByID(id) is None):
+        print("Item " + str(id) + " not found!")
+        return False
+    else:
+        update_item = Item.query.filter_by(id = item_id).first()
+        update_item.quantity = quantity
+        db.session.commit()
+        return True

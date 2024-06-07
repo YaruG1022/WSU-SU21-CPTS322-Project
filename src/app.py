@@ -38,10 +38,11 @@ def additem_test():
 
 @app.route("/item_list")
 def listitem_test():
-    itemlist = getItemList()
+    itemlist = getAllItems()
     return render_template("itemlist_test.html", itemlist = itemlist)
     pass
 
 @app.route("/success")
 def success_page():
     return render_template("success.html")
+
