@@ -1,24 +1,46 @@
 from flask import Flask, render_template, request, url_for, make_response, redirect
 from markupsafe import escape
+
+import secrets
+from pathlib import Path
+
 from datetime import datetime
 from models import *
 from flask_login import LoginManager
 import os
+from login_bp import login_bp, bcrypt
 
 app = Flask(__name__) # create flask app
+app.register_blueprint(login_bp) # register login blueprint
+
 # Temporary item database to test in development (./data/test.db)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
+# generate secret key if it doesn't exist
+SECRET_FILE_PATH = Path("secret.txt")
+try:
+    # read secret key from file
+    with SECRET_FILE_PATH.open("r") as secret_file:
+        app.config['SECRET_KEY'] = secret_file.read()
+except FileNotFoundError:
+    # File not found, generate secret key file
+    with SECRET_FILE_PATH.open("w") as secret_file:
+        app.secret_key = secrets.token_urlsafe(32)
+        secret_file.write(app.secret_key)
+
 db.init_app(app)
+bcrypt.init_app(app)
 
 ## Login manager
 login_manager = LoginManager()
-login_manager.login_view = 'auth.login'
+login_manager.login_view = 'login_bp.login_form'
 login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
+
+
 
 # database creation function
 def create_db():
