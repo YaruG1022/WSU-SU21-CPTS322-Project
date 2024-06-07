@@ -6,7 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="StyleSheet1.css">
-
+    <script src="jquery-3.7.1.min.js"></script>
+    <script src="navbar.js"></script>
 
 </head>
 
@@ -19,25 +20,11 @@
 
 <body onload="myFunction()">
 
-    <div class="topnav">
-        <a href="homepage.html">Home</a>
-        <a href="inventory.html">Inventory</a>
-        <a href="donation.html">Donation</a>
-        <a href="transaction.html">Order Now</a>
-        <div class="search-container" style="float: left;">
-            <form action="/action_page.php">
-                <input type="text" placeholder="Search.." name="search">
-                <button type="submit"><i class="fa fa-search"></i></button>
-            </form>
-        </div>
-        <a class="active" href="UserAccount.html" style="float: right; padding: 14px 16px;">
-            <i class="fa fa-user"></i> Log In
-        </a>
-        <a href="report.html" style="float: right; padding: 14px 16px;" title="Generate report"><i class="fa fa-file"></i></a>
-    </div>
+    <div id="navbar"></div>
+    <script>
+      document.getElementById('navbar').innerHTML = generateNavbar();
+    </script>
     
-
-
     <!--Notice: action="/action_page.php" sends the form-data to a file named "action_page.php", change "/action_page.php" to the targeted python file.-->
     <form action="/action_page.php" method="get">
         <div class="container">
