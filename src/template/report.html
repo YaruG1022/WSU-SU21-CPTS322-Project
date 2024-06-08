@@ -1,0 +1,130 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Generate Report</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/StyleSheet1.css">
+    <script src="../static/js/jquery-3.7.1.min.js"></script>
+    <script src="../static/js/navbar.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
+</head>
+<body>
+
+    <div id="navbar"></div>
+    <script>
+        document.getElementById('navbar').innerHTML = generateNavbar();
+    </script>
+
+    <div class="report-container">
+        <h1>Generate Report</h1>
+        <form id="reportForm">
+            <label for="reportType">Select Report Type:</label>
+            <select id="reportType" name="reportType" class="report-select">
+                <option value="inventory">Inventory</option>
+                <option value="donation">Donation</option>
+                <option value="orders">Orders</option>
+            </select>
+
+            <label for="exportFormat">Select Export Format:</label>
+            <select id="exportFormat" name="exportFormat" class="report-select">
+                <option value="csv">CSV</option>
+                <option value="xls">XLS</option>
+            </select>
+
+            <button type="button" class="report-button" onclick="generateReport()">Generate Report</button>
+        </form>
+
+        <div class="report-search-container">
+            <input type="text" id="searchBar" class="report-search" onkeyup="searchItems()" placeholder="Search for items...">
+            <button type="button" class="report-button" onclick="searchItems()"><i class="fa fa-search"></i></button>
+        </div>
+
+        <table id="reportTable">
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Quantity</th>
+                    <th>Category</th>
+                    <!-- Add other necessary columns here -->
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Data will be dynamically inserted here -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        function generateReport() {
+            const reportType = document.getElementById('reportType').value;
+            const exportFormat = document.getElementById('exportFormat').value;
+            // Fetch data from the server based on the selected report type
+            fetch(`/getReportData?reportType=${reportType}`)
+                .then(response => response.json())
+                .then(data => {
+                    populateTable(data);
+                    if (exportFormat === 'csv') {
+                        exportToCSV(data);
+                    } else if (exportFormat === 'xls') {
+                        exportToXLS(data);
+                    }
+                });
+        }
+
+        function populateTable(data) {
+            const tableBody = document.getElementById('reportTable').getElementsByTagName('tbody')[0];
+            tableBody.innerHTML = '';
+            data.forEach(item => {
+                const row = tableBody.insertRow();
+                row.insertCell(0).innerText = item.name;
+                row.insertCell(1).innerText = item.quantity;
+                row.insertCell(2).innerText = item.category;
+                // Add other necessary cells here
+            });
+        }
+
+        function searchItems() {
+            const query = document.getElementById('searchBar').value.toLowerCase();
+            const rows = document.getElementById('reportTable').getElementsByTagName('tbody')[0].getElementsByTagName('tr');
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let match = false;
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].innerText.toLowerCase().includes(query)) {
+                        match = true;
+                        break;
+                    }
+                }
+                rows[i].style.display = match ? '' : 'none';
+            }
+        }
+
+        function exportToCSV(data) {
+            const csvRows = [];
+            const headers = Object.keys(data[0]);
+            csvRows.push(headers.join(','));
+
+            for (const row of data) {
+                const values = headers.map(header => `"${row[header]}"`);
+                csvRows.push(values.join(','));
+            }
+
+            const csvString = csvRows.join('\n');
+            const a = document.createElement('a');
+            a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
+            a.download = 'report.csv';
+            a.click();
+        }
+
+        function exportToXLS(data) {
+            const ws = XLSX.utils.json_to_sheet(data);
+            const wb = XLSX.utils.book_new();
+            XLSX.utils.book_append_sheet(wb, ws, 'Report');
+            XLSX.writeFile(wb, 'report.xlsx');
+        }
+    </script>
+</body>
+</html>

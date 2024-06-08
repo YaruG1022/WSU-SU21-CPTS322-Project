@@ -1,0 +1,107 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Transaction Page</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="../static/StyleSheet1.css">
+    <script src="../static/js/jquery-3.7.1.min.js"></script>
+    <script src="../static/js/navbar.js"></script>
+
+
+</head>
+<body>
+    <div id="navbar"></div>
+    <script>
+      document.getElementById('navbar').innerHTML = generateNavbar();
+    </script>
+
+    <div class="main">
+        <div class="transaction-buttons">
+            <button class="fa fa-check"> Confirm Order</button>
+            <button class="fa fa-times"> Cancel Order</button>
+            <button class="fa fa-truck"> Mark as Delivered</button>
+            <a href="report.html" style="float: center; padding: 14px 16px;" title="Generate report"><i class="fa fa-file"></i></a>
+        </div>
+        <table>
+            <thead>
+                <tr>
+                    <th></th>
+                    <th></th>
+                    <th>ORDER DATE</th>
+                    <th>DELIVERY DATE</th>
+                    <th>STATUS</th>
+                    <th>ITEMS</th>
+                    <th>RECIPIENT</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
+                    <td>06/05/2024 12:34</td>
+                    <td>06/07/2024</td>
+                    <td>Pending</td>
+                    <td>
+                        <button class="collapsible">ORD123 - Rice, Beans, Canned Goods</button>
+                        <div class="collapsible-content">
+                            <p><strong>Order ID:</strong> ORD123</p>
+                            <p><strong>Items:</strong> Rice, Beans, Canned Goods</p>
+                            <p><strong>More Info:</strong> Additional details about the items ordered.</p>
+                        </div>
+                    </td>
+                    <td>John Doe<br>123 Elm Street</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
+                    <td>06/04/2024 10:20</td>
+                    <td>06/06/2024</td>
+                    <td>Shipped</td>
+                    <td>
+                        <button class="collapsible">ORD124 - Pasta, Tomato Sauce, Olive Oil</button>
+                        <div class="collapsible-content">
+                            <p><strong>Order ID:</strong> ORD124</p>
+                            <p><strong>Items:</strong> Pasta, Tomato Sauce, Olive Oil</p>
+                            <p><strong>More Info:</strong> Additional details about the items ordered.</p>
+                        </div>
+                    </td>
+                    <td>Jane Smith<br>456 Oak Avenue</td>
+                </tr>
+                <tr>
+                    <td><input type="checkbox"></td>
+                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
+                    <td>06/03/2024 09:15</td>
+                    <td>06/05/2024</td>
+                    <td>Delivered</td>
+                    <td>
+                        <button class="collapsible">ORD125 - Bread, Milk, Eggs</button>
+                        <div class="collapsible-content">
+                            <p><strong>Order ID:</strong> ORD125</p>
+                            <p><strong>Items:</strong> Bread, Milk, Eggs</p>
+                            <p><strong>More Info:</strong> Additional details about the items ordered.</p>
+                        </div>
+                    </td>
+                    <td>Bob Johnson<br>789 Pine Road</td>
+                </tr>
+                <!-- Add more rows as needed -->
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        $(document).ready(function(){
+            $(".collapsible").click(function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        });
+    </script>
+</body>
+</html>
