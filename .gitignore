@@ -1,0 +1,4 @@
+# do not commit venv, pycache, and package info.
+venv/
+src/__pycache__/
+src/WSU_SU21_CPTS322_Project.egg-info
