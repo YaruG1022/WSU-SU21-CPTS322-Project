@@ -15,6 +15,7 @@ app.register_blueprint(login_bp) # register login blueprint
 
 # Temporary item database to test in development (./data/test.db)
 basedir = os.path.abspath(os.path.dirname(__file__))
+os.makedirs(os.path.join(basedir, "data"))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
 # generate secret key if it doesn't exist
 SECRET_FILE_PATH = Path("secret.txt")
