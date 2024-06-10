@@ -2,3 +2,6 @@
 venv/
 src/__pycache__/
 src/WSU_SU21_CPTS322_Project.egg-info
+src/data/test.db
+src/secret.txt
+secret.txt
