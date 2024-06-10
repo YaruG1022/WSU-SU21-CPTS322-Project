@@ -1,12 +1,8 @@
-function generateNavbar() {
+function generateNavbar(navbar_entries) {
     const currentPath = window.location.pathname.split('/').pop();
-    const navItems = [
-        { name: 'Home', path: 'homepage.html' },
-        { name: 'Inventory', path: 'inventory.html' },
-        { name: 'Donation', path: 'donation.html' },
-        { name: 'Order Now', path: 'transaction.html' },
-        { name: 'Log In', path: 'javascript:void(0)', style: 'float: right; padding: 14px 16px;', icon: 'fa fa-user', id: 'loginBtn' }
-    ];
+    const navItems = navbar_entries;
+
+
 
     return `
       <div class="topnav">
