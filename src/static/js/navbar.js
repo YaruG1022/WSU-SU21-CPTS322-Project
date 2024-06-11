@@ -81,8 +81,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     window.onclick = function(event) {
       if (event.target == loginModal) {
         loginModal.style.display = "none";
+        loginModal.getElementsByClassName("warning")[0].innerHTML = "";
+        signupModal.getElementsByClassName("warning")[0].innerHTML = "";
       } else if (event.target == signupModal) {
         signupModal.style.display = "none";
+        loginModal.getElementsByClassName("warning")[0].innerHTML = "";
+        signupModal.getElementsByClassName("warning")[0].innerHTML = "";
       }
     }
 

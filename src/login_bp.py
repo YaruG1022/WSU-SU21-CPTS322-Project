@@ -66,7 +66,7 @@ def login():
         db.session.commit()
         login_user(user, remember=remember)
         # correct login
-        return redirect(url_for(redir))
+        return redirect(redir)
     
     # incorrect login
     flash('Login failed, incorrect username or password.')
