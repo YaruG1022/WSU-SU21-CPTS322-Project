@@ -1,7 +1,8 @@
+<!-- Base interface inherited by other render templates -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>{% block title %} {% endblock %} - Inventory manager</title>
+    <title>{{ title }} - Inventory manager</title>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -13,21 +14,75 @@
 
     <script>
             const navItems = [
-                { name: 'Home', path: "{{ url_for('homepage') }}" },
-                { name: 'Inventory', path: "{{ url_for('inventory') }}" },
-                { name: 'Donation', path: "{{ url_for('add_donation') }}" },
-                { name: 'Order Now', path: "{{ url_for('transaction') }}" },
+                { name: 'Home', path: "{{ url_for('interface_bp.home_page') }}" },
+                { name: 'Inventory', path: "{{ url_for('interface_bp.inventory_pg') }}" },
+                { name: 'Donation', path: "{{ url_for('interface_bp.donation_pg') }}" },
+                { name: 'Order Now', path: "{{ url_for('interface_bp.transaction_pg') }}" },
                 { name: 'Log In', path: 'javascript:void(0)', style: 'float: right; padding: 14px 16px;', icon: 'fa fa-user', id: 'loginBtn' }
             ];
-
-
-        document.getElementById('navbar').innerHTML = generateNavbar(navItems);
-      </script>
+    </script>
 </head>
 <body>
-    <div class="topnav"></div>
-
+    <div id="topnav">
+    
+    </div>
+    <script>document.getElementById('topnav').innerHTML = generateNavbar(navItems);</script>
     <div class="content">
+        <!-- CONTENT BLOCK FOR TEMPLATING -->
         {% block content %} {% endblock %}
     </div>
+
+    <!-- Footer -->
+    <div class="footer">
+        <h5>Created by T-Nine</h5>
+    </div>
+    
+    <!-- Modals -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal');">&times;</span>
+            <h2>Login</h2>
+            <div class="warning">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <p>{{ messages[0] }}</p>
+                {% endif %}
+                {% endwith %}
+            </div>
+            <form id="loginForm" action="{{ url_for('login_bp.login') }}" method='post'>
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email"><br><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password"><br><br>
+                <input type="hidden" name="redir" value="{{ request.path }}">
+                <button type="submit">Login</button>
+            </form>
+            <p>Don't have an account? <a href="#" id="signupLink" onclick="closeModal('loginModal'); openModal('signupModal');">Sign up</a></p>
+        </div>
+    </div>
+
+    <div id="signupModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('signupModal');">&times;</span>
+            <h2>Sign Up</h2>
+            <div class="warning">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <p>{{ messages[0] }}</p>
+                {% endif %}
+                {% endwith %}
+            </div>
+            <form id="signupForm" action="{{ url_for('login_bp.signup') }}" method='post'>
+                <label for="email">Email:</label>
+                <input type="text" id="email" name="email"><br><br>
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username"><br><br>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password"><br><br>
+                <input type="hidden" name="redir" value="{{ request.path }}">
+                <button type="submit">Sign Up</button>
+            </form>
+        </div>
+    </div>
 </body>
+</html>

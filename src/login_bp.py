@@ -16,22 +16,28 @@ def signup_form():
 @login_bp.route('/signup', methods=['POST'])
 def signup():
     email = request.form.get('email')
-    name = request.form.get('name')
+    name = request.form.get('username')
     password = request.form.get('password')
+    
+    # redirect path
+    redir = request.form.get('redir')
+
+    # not all forms filled out
     if not (email and name and password):
         flash('Please fill out all forms before signing up.')
-        return redirect(url_for('signup_form'))
+        return redirect(redir + "?signup")
+    
     # check for duplicate email
     user = User.query.filter_by(email=email).first()
     if(user is not None):
         flash('Email address already in use')
-        return redirect(url_for('login_bp.signup_form'))
+        return redirect(redir + "?signup")
     
     new_user = User(email=email, name=name, password=bcrypt.generate_password_hash(password))
     db.session.add(new_user)
     db.session.commit()
     flash('Successfully signed up')
-    return redirect(url_for('login_bp.login_form'))
+    return redirect(redir + "?login")
 
 # login functions
 # login form
@@ -47,6 +53,10 @@ def login():
     email = request.form.get('email')
     password = request.form.get('password')
     remember = request.form.get('remember')
+
+    # redirect path
+    redir = request.form.get('redir')
+
     # search for a user with the entered email
     user = User.query.filter_by(email=email).first()
     # validate credentials
@@ -55,9 +65,12 @@ def login():
         db.session.add(user)
         db.session.commit()
         login_user(user, remember=remember)
-        return redirect(url_for("login_bp.login_test"))
+        # correct login
+        return redirect(url_for(redir))
+    
+    # incorrect login
     flash('Login failed, incorrect username or password.')
-    return redirect(url_for("login_bp.login_form"))
+    return redirect(redir + "?login")
 
 # pages that need a login to view
 

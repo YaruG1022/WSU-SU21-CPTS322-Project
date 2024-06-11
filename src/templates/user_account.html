@@ -1,0 +1,92 @@
+﻿{% extends 'interface_base.html' %}
+{% block content %}
+<div class="user-account">
+        <h1>User Account</h1>
+        <div class="user-info">
+            <div class="avatar" id="userAvatar">
+                <i class="fa fa-user"></i>
+            </div>
+            <form id="avatarForm">
+                <label for="avatarUpload">Change Avatar:</label>
+                <input type="file" id="avatarUpload" name="avatarUpload">
+                <button type="submit">Upload</button>
+            </form>
+            <ul class="user-details">
+                <li>Name: <span class="editable" id="username">YG</span></li>
+                <li>Account Number: <span class="editable" id="accountNumber">123456</span></li>
+                <li>Password: <span class="editable" id="password">********</span></li>
+                <li>Identity: <span class="editable" id="identity">Staff</span></li>
+            </ul>
+            <button id="saveBtn">Save</button>
+        </div>
+    </div>
+
+    <script src="jquery-3.7.1.min.js"></script>
+    <script src="navbar.js"></script>
+    <script>
+        function makeEditable(span) {
+            span.addEventListener('click', function() {
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.value = span.textContent;
+                input.className = 'edit-input';
+                span.parentNode.replaceChild(input, span);
+                input.focus();
+
+                function revertToSpan() {
+                    const newSpan = document.createElement('span');
+                    newSpan.className = 'editable';
+                    newSpan.id = span.id;
+                    newSpan.textContent = input.value;
+                    input.parentNode.replaceChild(newSpan, input);
+                    makeEditable(newSpan);  // Reapply the event listener
+                }
+
+                input.addEventListener('blur', revertToSpan);
+                document.getElementById('saveBtn').addEventListener('click', function() {
+                    revertToSpan();
+                }, { once: true });
+            });
+        }
+
+        document.querySelectorAll('.editable').forEach(makeEditable);
+
+        document.getElementById('saveBtn').addEventListener('click', function() {
+            // Save changes (e.g., send to server, update UI)
+            const userInfo = {};
+            document.querySelectorAll('.editable').forEach(item => {
+                userInfo[item.id] = item.textContent;
+            });
+            console.log('Saved user info:', userInfo);
+            alert('User information saved successfully!');
+        });
+
+        document.getElementById('avatarForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+            // Handle avatar upload (e.g., send to server, update UI)
+            const avatarUpload = document.getElementById('avatarUpload').files[0];
+            if (avatarUpload) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const avatarElement = document.getElementById('userAvatar');
+                    avatarElement.innerHTML = `<img src="${e.target.result}" alt="User Avatar" class="avatar-image">`;
+                }
+                reader.readAsDataURL(avatarUpload);
+            }
+        });
+
+        document.addEventListener('click', function(event) {
+            const isClickInside = event.target.closest('.editable') || event.target.closest('.edit-input');
+            if (!isClickInside) {
+                document.querySelectorAll('.edit-input').forEach(input => {
+                    const span = document.createElement('span');
+                    span.className = 'editable';
+                    span.id = input.id;
+                    span.textContent = input.value;
+                    input.parentNode.replaceChild(span, input);
+                    makeEditable(span);
+                });
+            }
+        });
+    </script>
+{% endblock %}

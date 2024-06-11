@@ -1,52 +1,35 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Donation</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../static/StyleSheet1.css">
-    <script src="../static/js/jquery-3.7.1.min.js"></script>
-    <script src="../static/js/navbar.js"></script>
-</head>
-
-<script>
-    function myFunction() {
-        var mcost = 0;
-        document.getElementById("cost").innerHTML = mcost;
-    }
-
-    document.addEventListener("DOMContentLoaded", function() {
-        loadDonations();
-    });
-
-    function loadDonations() {
-        fetch('/getRecentDonations')  // Update this endpoint to match your server configuration
-            .then(response => response.json())
-            .then(data => {
-                const tableBody = document.getElementById('donationTableBody');
-                data.forEach(donation => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${donation.projectName}</td>
-                        <td>${donation.projectType}</td>
-                        <td>${donation.donator}</td>
-                        <td>${donation.items}</td>
-                        <td>${donation.date}</td>
-                    `;
-                    tableBody.appendChild(row);
-                });
-            });
-    }
-</script>
-
-<body onload="myFunction()">
-
-    <div id="navbar"></div>
+﻿{% extends 'interface_base.html' %}
+{% block content %}
     <script>
-        document.getElementById('navbar').innerHTML = generateNavbar();
+        function getCost() {
+            var mcost = 0;
+            document.getElementById("cost").innerHTML = mcost;
+        }
+
+        document.addEventListener("DOMContentLoaded", function() {
+            loadDonations();
+        });
+
+        function loadDonations() {
+            fetch('/getRecentDonations')  // Update this endpoint to match your server configuration
+                .then(response => response.json())
+                .then(data => {
+                    const tableBody = document.getElementById('donationTableBody');
+                    data.forEach(donation => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${donation.projectName}</td>
+                            <td>${donation.projectType}</td>
+                            <td>${donation.donator}</td>
+                            <td>${donation.items}</td>
+                            <td>${donation.date}</td>
+                        `;
+                        tableBody.appendChild(row);
+                    });
+                });
+        }
     </script>
-    
+
     <!--Notice: action="/action_page.php" sends the form-data to a file named "action_page.php", change "/action_page.php" to the targeted python file.-->
     <form action="/action_page.php" method="get">
         <div class="donation-container">
@@ -94,6 +77,4 @@
             </tbody>
         </table>
     </div>
-
-</body>
-</html>
+{% endblock %}

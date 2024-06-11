@@ -1,6 +1,7 @@
 
 from flask import Flask, render_template, url_for, request, Blueprint
-
+from flask_login import login_user, login_required, logout_user, current_user
+from models import db, User
 
 interface_bp = Blueprint("interface_bp", __name__)
 
@@ -23,4 +24,9 @@ def report_pg():
 
 @interface_bp.route('/transaction')
 def transaction_pg():
-    return render_template("transaction.html", title="Transaction")
+    return render_template("transaction.html", title="Order Now")
+
+@interface_bp.route('/account')
+@login_required
+def account_pg():
+    return render_template("user_account.html", title="Account")
