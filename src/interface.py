@@ -11,18 +11,22 @@ def home_page():
     return render_template("homepage.html", title="Home")
 
 @interface_bp.route('/add_donation')
+@login_required
 def donation_pg():
     return render_template("donation.html", title="Add Donation")
 
 @interface_bp.route('/inventory')
+@login_required
 def inventory_pg():
     return render_template("inventory.html", title="Inventory")
 
 @interface_bp.route('/report')
+@login_required
 def report_pg():
     return render_template("report.html", title="Report")
 
 @interface_bp.route('/transaction')
+@login_required
 def transaction_pg():
     return render_template("transaction.html", title="Order Now")
 
@@ -30,3 +34,7 @@ def transaction_pg():
 @login_required
 def account_pg():
     return render_template("user_account.html", title="Account")
+
+@interface_bp.route('/login_required')
+def login_dialogue():
+    return render_template("login_required.html", title="Login Required")

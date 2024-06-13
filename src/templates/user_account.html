@@ -1,28 +1,42 @@
 ﻿{% extends 'interface_base.html' %}
 {% block content %}
+{% if current_user.is_authenticated %}
 <div class="user-account">
         <h1>User Account</h1>
         <div class="user-info">
             <div class="avatar" id="userAvatar">
-                <i class="fa fa-user"></i>
+                <img src="{{ current_user.pfp_url }}"></img>
             </div>
-            <form id="avatarForm">
+            <form id="avatarForm" method="post" action="{{ url_for('login_bp.upload_pfp') }}" enctype=multipart/form-data>
                 <label for="avatarUpload">Change Avatar:</label>
-                <input type="file" id="avatarUpload" name="avatarUpload">
+                <input type="file" id="avatarUpload" name="file">
                 <button type="submit">Upload</button>
             </form>
+            <div class="warning">
+                {% with messages = get_flashed_messages() %}
+                {% if messages %}
+                    <p>{{ messages[0] }}</p>
+                {% endif %}
+                {% endwith %}
+            </div>
             <ul class="user-details">
-                <li>Name: <span class="editable" id="username">YG</span></li>
-                <li>Account Number: <span class="editable" id="accountNumber">123456</span></li>
-                <li>Password: <span class="editable" id="password">********</span></li>
-                <li>Identity: <span class="editable" id="identity">Staff</span></li>
+                {% with user = current_user %}
+                {% if user.is_authenticated %}
+                    <li>Name: <span class="editable" id="username">{{ user.name }}</span></li>
+                    <li>Email: <span class="editable" id="email">{{ user.email }}</span></li>
+                    <li>Account ID: <span id="accountId">{{ user.id }}</span></li>
+                {% else %}
+                    <li>Name: <span class="editable" id="username">N/A</span></li>
+                    <li>Email: <span class="editable" id="email">N/A</span></li>
+                    <li>Account ID: <span id="accountId">N/A</span></li>
+                {% endif %}
+                {% endwith %}
             </ul>
             <button id="saveBtn">Save</button>
         </div>
     </div>
 
     <script src="jquery-3.7.1.min.js"></script>
-    <script src="navbar.js"></script>
     <script>
         function makeEditable(span) {
             span.addEventListener('click', function() {
@@ -50,7 +64,7 @@
         }
 
         document.querySelectorAll('.editable').forEach(makeEditable);
-
+        /*
         document.getElementById('saveBtn').addEventListener('click', function() {
             // Save changes (e.g., send to server, update UI)
             const userInfo = {};
@@ -61,20 +75,7 @@
             alert('User information saved successfully!');
         });
 
-        document.getElementById('avatarForm').addEventListener('submit', function(event) {
-            event.preventDefault();
-            // Handle avatar upload (e.g., send to server, update UI)
-            const avatarUpload = document.getElementById('avatarUpload').files[0];
-            if (avatarUpload) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const avatarElement = document.getElementById('userAvatar');
-                    avatarElement.innerHTML = `<img src="${e.target.result}" alt="User Avatar" class="avatar-image">`;
-                }
-                reader.readAsDataURL(avatarUpload);
-            }
-        });
-
+        */
         document.addEventListener('click', function(event) {
             const isClickInside = event.target.closest('.editable') || event.target.closest('.edit-input');
             if (!isClickInside) {
@@ -88,5 +89,11 @@
                 });
             }
         });
+        
     </script>
+{% else %}
+    <script>
+        openModal("loginModal");
+    </script>
+{% endif %}
 {% endblock %}

@@ -5,7 +5,7 @@ function generateNavbar(navbar_entries) {
       <div class="topnav">
           ${navbar_entries.map(item => `
             <a href="${item.path}" class="${currentPath === item.path ? 'active' : ''}" ${item.style ? `style="${item.style}"` : ''} ${item.title ? `title="${item.title}"` : ''} ${item.id ? `id="${item.id}"` : ''}>
-                ${item.icon ? `<i class="${item.icon}"></i>` : ''} ${item.name}
+                ${item.icon ? `<i class="${item.icon}"></i>` : ''} ${item.img ? `<div class="topnav-pfp"><img src="${item.img}"></div>` : '' }  ${item.name}
             </a>
           `).join('')}
           <div class="search-container" style="float: left;">
@@ -90,12 +90,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
       }
     }
 
+    if(checkGET('next')) {
+      redir_location = new URLSearchParams(window.location.search).get("next");
+      redirs = document.getElementsByClassName("redir")
+      for(i = 0; i < redirs.length; i++){
+          redirs[i].setAttribute("value", redir_location);
+      }
+    }
+
     if(checkGET('login'))
-      {
-          openModal("loginModal");
-      }
-      if(checkGET('signup'))
-      {
-          openModal("signupModal");
-      }
+    {
+        openModal("loginModal");
+    }
+    if(checkGET('signup'))
+    {
+        openModal("signupModal");
+    }
 });

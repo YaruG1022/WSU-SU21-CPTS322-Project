@@ -18,7 +18,12 @@
                 { name: 'Inventory', path: "{{ url_for('interface_bp.inventory_pg') }}" },
                 { name: 'Donation', path: "{{ url_for('interface_bp.donation_pg') }}" },
                 { name: 'Order Now', path: "{{ url_for('interface_bp.transaction_pg') }}" },
-                { name: 'Log In', path: 'javascript:void(0)', style: 'float: right; padding: 14px 16px;', icon: 'fa fa-user', id: 'loginBtn' }
+                {% if current_user.is_authenticated %}
+                    { name: '{{ current_user.name }}', path: '{{ url_for('interface_bp.account_pg') }}', style: 'float: right; padding: 14px 16px;', id: 'userBtn', img: '{{ current_user.pfp_url }}'},
+                    { name: 'Log out', path: '{{ url_for('login_bp.log_out') }}', style: 'float: right; padding: 14px 16px;', icon: 'fa fa-sign-out', id: 'logOutBtn'}
+                    {% else %}
+                    { name: 'Log In', path: 'javascript:void(0)', style: 'float: right; padding: 14px 16px;', icon: 'fa fa-user', id: 'loginBtn' }
+                {% endif %}
             ];
     </script>
 </head>
@@ -53,7 +58,8 @@
                 <label for="email">Email:</label>
                 <input type="text" id="email" name="email"><br><br>
                 <label for="password">Password:</label>
-                <input type="password" id="password" name="password"><br><br>
+                <input type="password" id="password" name="password"><br>
+                <span><input type="checkbox" class="remember-box" name="remember"> Remember Me</span><br><br>
                 <input type="hidden" name="redir" value="{{ request.path }}">
                 <button type="submit">Login</button>
             </form>

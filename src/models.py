@@ -19,9 +19,7 @@ class User(UserMixin, db.Model):
     email = db.Column(db.String(255), unique=True) # duplicate emails not allowed
     password = db.Column(db.String(255))
     name = db.Column(db.String(255))
-
-
-
+    pfp_url = db.Column(db.String(255))
 
 ## Item model functions
 def addItem(item_name, item_quantity, item_stockdate, item_expdate):
