@@ -1,0 +1,59 @@
+﻿{% extends 'interface_base.html' %}
+{% block content %}
+<!-- Header -->
+<header style="background-color: #1E90FF;">
+    <div class="slideshow-container">
+        <div class="mySlides fade">
+            <div class="slide-images-container">
+                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 2">
+                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 2">
+                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 3">
+            </div>
+        </div>
+
+        <div class="mySlides fade">
+            <div class="slide-images-container">
+                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 4">
+                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 5">
+                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 6">
+            </div>
+        </div>
+
+        <div class="mySlides fade">
+            <div class="slide-images-container">
+                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 7">
+                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 8">
+                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 9">
+            </div>
+        </div>
+
+        <a class="prev" onclick="plusSlides(-1)">❮</a>
+        <a class="next" onclick="plusSlides(1)">❯</a>
+        
+        <br>
+        <div style="text-align:center">
+            <span class="dot" onclick="currentSlide(1)"></span> 
+            <span class="dot" onclick="currentSlide(2)"></span> 
+            <span class="dot" onclick="currentSlide(3)"></span> 
+        </div>
+    </div>
+</header>
+
+<div class="main">
+
+
+
+    
+</div>
+
+
+
+<script src="../static/js/slideshow.js"></script>
+
+<div class="row">
+    <div class="main2">
+        <h2>More information:</h2>
+        <p>......</p>
+    </div>
+</div>
+{% endblock %}
