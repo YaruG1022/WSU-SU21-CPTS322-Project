@@ -25,7 +25,7 @@ required_folders = [ "data/", "static/img", "static/img/items", "static/img/prof
 for dir in required_folders:
     if(os.path.isdir(dir) == False):
         os.makedirs(os.path.join(basedir, dir))
-
+        
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
 # image upload base url
 app.config['IMG_URL'] = "static/img/"
