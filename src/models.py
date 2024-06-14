@@ -1,20 +1,38 @@
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 import datetime
+from flask import current_app
 
 db = SQLAlchemy()
+class User(UserMixin, db.Model):
+    id = db.Column(db.Integer, primary_key=True) # automatically increments
+    email = db.Column(db.String(255), unique=True) # duplicate emails not allowed
+    password = db.Column(db.String(255))
+    name = db.Column(db.String(255))
+    pfp_url = db.Column(db.String(255))
+
+    def __repr__(self):
+        return '<Email: %r>' % self.email
+
 ## Item model
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True) # item ids, automatically increments
     name = db.Column(db.String(255), nullable = False)
+    type = db.Column(db.String(255), nullable = False)
     quantity = db.Column(db.Integer, nullable = False)
     stockdate = db.Column(db.Date, nullable = False) # item last stock/restock date
     expdate = db.Column(db.Date, nullable = False) # item expiration date
+    image = db.Column(db.String(255), nullable = True) # path to picture of item (optional)
 
+    ## Item model functions
     def __repr__(self):
-        return '<User %r>' % self.username
-    def addItem(item_name, item_quantity, item_stockdate, item_expdate):
-        new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate)
+        return '<ID: %r>' % self.id
+    
+    def addItem(item_name, item_quantity, item_stockdate, item_expdate, item_img = None):
+        if(item_img is not None):
+            new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate, image = item_img)
+        else:
+            new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate, image = "static/img/placeholder.png")
         db.session.add(new_item)
 
         db.session.commit()
@@ -59,13 +77,13 @@ class Item(db.Model):
             if(new_expdate is not None): update_item.expdate = new_expdate
             db.session.commit()
             return True   
-class User(UserMixin, db.Model):
-    id = db.Column(db.Integer, primary_key=True) # automatically increments
-    email = db.Column(db.String(255), unique=True) # duplicate emails not allowed
-    password = db.Column(db.String(255))
-    name = db.Column(db.String(255))
-    pfp_url = db.Column(db.String(255))
 
-## Item model functions
+class Order(db.Model):
+    id = db.Column(db.Integer, primary_key=True) # order id, automatically increments
+    orderdate = db.Column(db.Date, nullable = False)
+    deliverydate = db.Column(db.Date, nullable = True) # can be empty until delivery
+    status = db.Column(db.String(255), nullable = False)
+    items = db.Column(db.String(255), nullable = False) # stored as comma separated item IDs
+    recipient_name = db.Column(db.String(255), nullable = False)
+    recipient_address = db.Column(db.String(255), nullable = False)
 
-    
