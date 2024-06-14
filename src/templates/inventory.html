@@ -5,7 +5,7 @@
             <button class="fa fa-plus"><alt="Add"> Add</button>
             <button class="fa fa-edit"><alt="Update"> Update</button>
             <button class="fa fa-remove"><alt="Delete"> Delete</button>
-            <a href="report.html" style="float: center; padding: 14px 16px;" title="Generate report"><i class="fa fa-file"></i></a>
+            <a href="{{ url_for('interface_bp.report_pg') }}" style="float: center; padding: 14px 16px;" title="Generate report"><i class="fa fa-file"></i></a>
         </div>
         <table>
             <thead>
@@ -23,7 +23,7 @@
                 {% for item in items %}
                     <tr>
                         <td><input type="checkbox"></td>
-                        <td><img src="placeholder.png" alt="Icon" class="icon"></td>
+                        <td><img src="static/img/placeholder.png" alt="Icon" class="icon"></td>
                         <td>{{ item['id'] }}</td>
                         <td>{{ item['name'] }}</td>
                         <td>{{ item['quantity'] }}</td>
