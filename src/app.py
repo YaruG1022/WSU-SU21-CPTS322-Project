@@ -21,13 +21,15 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 # Create crucial empty directories if they do not exist
 if(os.path.isdir('data') == False):
     os.makedirs(os.path.join(basedir, "data"))
-if(os.path.isdir('static/img/profiles') == False or os.path.isdir('static/img/items') == False):
+if(os.path.isdir('static/img/profiles') == False and os.path.isdir('static/img/items') == False):
     os.makedirs(os.path.join(basedir, "static/img/profiles"))
     os.makedirs(os.path.join(basedir, "static/img/items"))
 
 # Create data directory
-basedir = os.path.abspath(os.path.dirname(__file__))
-os.makedirs(os.path.join(basedir, "data"))
+if(os.path.isdir('data') == False and os.path.isdir('data') == False):
+    basedir = os.path.abspath(os.path.dirname(__file__))
+    os.makedirs(os.path.join(basedir, "data"))
+
 # Temporary item database to test in development (./data/test.db)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
