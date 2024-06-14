@@ -26,8 +26,6 @@ for dir in required_folders:
     if(os.path.isdir(dir) == False):
         os.makedirs(os.path.join(basedir, dir))
 
-# Temporary item database to test in development (./data/test.db)
-basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
 # image upload base url
 app.config['IMG_URL'] = "static/img/"
