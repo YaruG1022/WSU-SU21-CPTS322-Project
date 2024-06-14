@@ -18,17 +18,13 @@ app.register_blueprint(interface_bp) # register login blueprint
 ###-------- Initialization --------###
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-# Create crucial empty directories if they do not exist
-if(os.path.isdir('data') == False):
-    os.makedirs(os.path.join(basedir, "data"))
-if(os.path.isdir('static/img/profiles') == False and os.path.isdir('static/img/items') == False):
-    os.makedirs(os.path.join(basedir, "static/img/profiles"))
-    os.makedirs(os.path.join(basedir, "static/img/items"))
+# Generate crucial directories
+# Note: default_profile.png is important, do not delete
+required_folders = [ "data/", "static/img", "static/img/items", "static/img/profiles"]
 
-# Create data directory
-if(os.path.isdir('data') == False and os.path.isdir('data') == False):
-    basedir = os.path.abspath(os.path.dirname(__file__))
-    os.makedirs(os.path.join(basedir, "data"))
+for dir in required_folders:
+    if(os.path.isdir(dir) == False):
+        os.makedirs(os.path.join(basedir, dir))
 
 # Temporary item database to test in development (./data/test.db)
 basedir = os.path.abspath(os.path.dirname(__file__))
