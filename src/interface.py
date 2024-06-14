@@ -1,7 +1,7 @@
 
 from flask import Flask, render_template, url_for, request, Blueprint
 from flask_login import login_user, login_required, logout_user, current_user
-from models import db, User
+from models import db, User, Item
 
 interface_bp = Blueprint("interface_bp", __name__)
 
@@ -18,7 +18,10 @@ def donation_pg():
 @interface_bp.route('/inventory')
 @login_required
 def inventory_pg():
-    return render_template("inventory.html", title="Inventory")
+    # get items from inventory
+    item_list = Item.getAllItems()
+
+    return render_template("inventory.html", title="Inventory", items = item_list)
 
 @interface_bp.route('/report')
 @login_required

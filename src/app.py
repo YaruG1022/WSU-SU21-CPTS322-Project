@@ -82,13 +82,13 @@ def additem_test():
     stockdate = datetime.datetime.strptime(request.form['stock-date'], '%Y-%m-%d')
     expdate = datetime.datetime.strptime(request.form['expiry-date'], '%Y-%m-%d')
 
-    addItem(itm_name, itm_quantity, stockdate, expdate)
+    Item.addItem(itm_name, itm_quantity, stockdate, expdate)
     resp = make_response(redirect(url_for("success_page")))
     return resp
 
 @app.route("/item_list")
 def listitem_test():
-    itemlist = getAllItems()
+    itemlist = Item.getAllItems()
     return render_template("itemlist_test.html", itemlist = itemlist)
     pass
 
