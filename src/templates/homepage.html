@@ -1,9 +1,49 @@
 ﻿{% extends 'interface_base.html' %}
 {% block content %}
-    <!-- Header -->
-    <header class="header" style="padding:128px 16px">
-        <h1>START PAGE</h1></header>
 
+    <!-- Header -->
+    <header style="background-color: #1E90FF;">
+        <div class="slideshow-container">
+            <div class="mySlides fade">
+                <div class="slide-images-container">
+                    <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 1">
+                    <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 1">
+                    <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 1">
+                </div>
+                <div>Caption Text</div>
+            </div>
+    
+            <div class="mySlides fade">
+                <div class="slide-images-container">
+                    <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 1">
+                    <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 1">
+                    <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 1">
+                </div>
+            </div>
+    
+            <div class="mySlides fade">
+                <div class="slide-images-container">
+                    <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 1">
+                    <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 1">
+                    <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 1">
+                </div>
+            </div>
+
+            <a class="prev" onclick="plusSlides(-1)">❮</a>
+            <a class="next" onclick="plusSlides(1)">❯</a>
+            
+            <br>
+            <div style="text-align:center">
+                <span class="dot" onclick="currentSlide(1)"></span> 
+                <span class="dot" onclick="currentSlide(2)"></span> 
+                <span class="dot" onclick="currentSlide(3)"></span> 
+            </div>
+        </div>
+
+    </header>
+
+    <script src="slideshow.js"></script>
+        
     <div class="row">
         <div class="main2">
             <h2>More information: </h2>
