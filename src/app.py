@@ -9,9 +9,21 @@ from models import *
 from flask_login import LoginManager
 import os
 from login_bp import login_bp, bcrypt
+from interface import interface_bp
 
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
+app.register_blueprint(interface_bp) # register login blueprint
+
+###-------- Initialization --------###
+basedir = os.path.abspath(os.path.dirname(__file__))
+
+# Create crucial empty directories if they do not exist
+if(os.path.isdir('data') == False):
+    os.makedirs(os.path.join(basedir, "data"))
+if(os.path.isdir('static/img/profiles') == False or os.path.isdir('static/img/items') == False):
+    os.makedirs(os.path.join(basedir, "static/img/profiles"))
+    os.makedirs(os.path.join(basedir, "static/img/items"))
 
 # Create data directory
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -19,6 +31,11 @@ os.makedirs(os.path.join(basedir, "data"))
 # Temporary item database to test in development (./data/test.db)
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
+# image upload base url
+app.config['IMG_URL'] = "static/img/"
+# max file size
+app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
+
 # generate secret key if it doesn't exist
 SECRET_FILE_PATH = Path("secret.txt")
 try:
@@ -34,16 +51,16 @@ except FileNotFoundError:
 db.init_app(app)
 bcrypt.init_app(app)
 
+###-------- Startup --------###
+
 ## Login manager
 login_manager = LoginManager()
-login_manager.login_view = 'login_bp.login_form'
+login_manager.login_view = 'interface_bp.login_dialogue'
 login_manager.init_app(app)
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
-
 
 # database creation function
 def create_db():
@@ -51,6 +68,8 @@ def create_db():
         db.create_all()
 # create database files if they do not exist
 create_db()
+
+###-------- Routes --------###
 
 @app.route("/")
 def index():
@@ -81,3 +100,4 @@ def listitem_test():
 def success_page():
     return render_template("success.html")
 
+###-----------------------###

@@ -1,18 +1,11 @@
-function generateNavbar() {
+function generateNavbar(navbar_entries) {
     const currentPath = window.location.pathname.split('/').pop();
-    const navItems = [
-        { name: 'Home', path: 'homepage.html' },
-        { name: 'Inventory', path: 'inventory.html' },
-        { name: 'Donation', path: 'donation.html' },
-        { name: 'Order Now', path: 'transaction.html' },
-        { name: 'Log In', path: 'javascript:void(0)', style: 'float: right; padding: 14px 16px;', icon: 'fa fa-user', id: 'loginBtn' }
-    ];
-
+    
     return `
       <div class="topnav">
-          ${navItems.map(item => `
+          ${navbar_entries.map(item => `
             <a href="${item.path}" class="${currentPath === item.path ? 'active' : ''}" ${item.style ? `style="${item.style}"` : ''} ${item.title ? `title="${item.title}"` : ''} ${item.id ? `id="${item.id}"` : ''}>
-                ${item.icon ? `<i class="${item.icon}"></i>` : ''} ${item.name}
+                ${item.icon ? `<i class="${item.icon}"></i>` : ''} ${item.img ? `<div class="topnav-pfp"><img src="${item.img}"></div>` : '' }  ${item.name}
             </a>
           `).join('')}
           <div class="search-container" style="float: left;">
@@ -23,39 +16,33 @@ function generateNavbar() {
           </div>
       </div>
 
-      <div id="loginModal" class="modal">
-          <div class="modal-content">
-              <span class="close">&times;</span>
-              <h2>Login</h2>
-              <form id="loginForm">
-                  <label for="username">Username:</label>
-                  <input type="text" id="username" name="username"><br><br>
-                  <label for="password">Password:</label>
-                  <input type="password" id="password" name="password"><br><br>
-                  <button type="submit">Login</button>
-              </form>
-              <p>Don't have an account? <a href="#" id="signupLink">Sign up</a></p>
-          </div>
-      </div>
-
-      <div id="signupModal" class="modal">
-          <div class="modal-content">
-              <span class="close">&times;</span>
-              <h2>Sign Up</h2>
-              <form id="signupForm">
-                  <label for="newUsername">Username:</label>
-                  <input type="text" id="newUsername" name="newUsername"><br><br>
-                  <label for="newPassword">Password:</label>
-                  <input type="password" id="newPassword" name="newPassword"><br><br>
-                  <button type="submit">Sign Up</button>
-              </form>
-          </div>
-      </div>
+      
     `;
 }
 
+function checkGET(param = '') {
+  if (new URLSearchParams(window.location.search).get(param) != null)
+      return true
+  return false
+}
+
+/* function that opens a modal based on id */
+function openModal(modal_id)
+{
+    var modal_elm = document.getElementById(modal_id);
+    modal_elm.style.display = "block";
+}
+
+/* function that closes a modal based on id */
+function closeModal(modal_id)
+{
+    var modal_elm = document.getElementById(modal_id);
+    modal_elm.style.display = "none";
+}
+
+
 document.addEventListener('DOMContentLoaded', (event) => {
-    document.getElementById('navbar').innerHTML = generateNavbar();
+    //document.getElementById('navbar').innerHTML = generateNavbar();
 
     // Get the modals
     var loginModal = document.getElementById("loginModal");
@@ -94,19 +81,29 @@ document.addEventListener('DOMContentLoaded', (event) => {
     window.onclick = function(event) {
       if (event.target == loginModal) {
         loginModal.style.display = "none";
+        loginModal.getElementsByClassName("warning")[0].innerHTML = "";
+        signupModal.getElementsByClassName("warning")[0].innerHTML = "";
       } else if (event.target == signupModal) {
         signupModal.style.display = "none";
+        loginModal.getElementsByClassName("warning")[0].innerHTML = "";
+        signupModal.getElementsByClassName("warning")[0].innerHTML = "";
       }
     }
 
-    // Add form submission handlers
-    document.getElementById('loginForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        window.location.href = 'UserAccount.html';
-    });
+    if(checkGET('next')) {
+      redir_location = new URLSearchParams(window.location.search).get("next");
+      redirs = document.getElementsByClassName("redir")
+      for(i = 0; i < redirs.length; i++){
+          redirs[i].setAttribute("value", redir_location);
+      }
+    }
 
-    document.getElementById('signupForm').addEventListener('submit', function(event) {
-        event.preventDefault();
-        window.location.href = 'UserAccount.html';
-    });
+    if(checkGET('login'))
+    {
+        openModal("loginModal");
+    }
+    if(checkGET('signup'))
+    {
+        openModal("signupModal");
+    }
 });

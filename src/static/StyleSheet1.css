@@ -5,6 +5,8 @@
 body {
     font-family: Arial, Helvetica, sans-serif;
     margin: 0;
+    position: relative;
+    height: 100vh;
 }
 
 .header {
@@ -25,10 +27,11 @@ body {
     text-align: center;
     background: #ddd;
     color: #333;
-    position: fixed;
+    position: absolute;
     width: 100%;
     height: 50px;
     bottom: 0;
+    left: 0;
 }
 
 .main1 {
@@ -52,6 +55,8 @@ body {
     background-color: #333;
     position: sticky;
     top: 0;
+    padding-top: 2px;
+    padding-bottom: 4px;
 }
 
 
@@ -106,22 +111,93 @@ body {
             background: #ccc;
         }
 
-@media screen and (max-width: 600px) {
-    .topnav .search-container {
-        float: none;
-    }
 
-        .topnav a, .topnav input[type=text], .topnav .search-container button {
-            float: none;
-            display: block;
-            text-align: left;
+        #userBtn {
+            display: flex;  
+            align-items: center;
+            justify-content: center;
+            height: 48px;
+            
+        }
+        
+        .topnav-pfp {
+            border-radius: 50%;
+            overflow: hidden;
+            position: relative;
+            width: 32px;
+            height: 32px;
+            margin-right: 5px;
+        }
+        
+        .topnav-pfp img {
+            display: inline-block;
+            margin: 0 auto;
+            height: 100%;
             width: 100%;
-            margin: 0;
-            padding: 14px;
+        }
+        
+        #userAvatar img {
+            width: 100%;
+            height: 100%
         }
 
+@media screen and (max-width: 600px) {
+    body {
+        min-height: 100%;
+        min-height:100svh;
+    }
+
+    .footer {
+        display: flex;
+        align-items: center;
+        position: relative;
+        justify-content: center;
+        bottom: 0px;
+        height: 10%;
+    }
+
+    
+
+    .topnav a, .topnav input[type=text], .topnav .search-container button {
+        float: none;
+        display: inline-block;
+        text-align: left;
+        width: 25%;
+        margin: 0;
+        padding: 14px;
+    }
+
+    .topnav-pfp {
+        border-radius: 50%;
+        overflow: hidden;
+        position: relative;
+        width: 32px;
+        height: 32px;
+        flex: none;
+        margin-right: 5px;
+    }
+    
+    .topnav-pfp img {
+        display: inline-block;
+        margin: 0 auto;
+        height: 32px;
+        width: 32px;
+    }
+
+    #userBtn {
+        display: flex;  
+        align-items: center;
+        justify-content: center;
+        height: 48px;
+        
+    }
+
+    .topnav .search-container {
+        padding: 5px;
+    }
     .topnav input[type=text] {
         border: 1px solid #ccc;
+        width: 65%;
     }
 }
 
@@ -365,7 +441,6 @@ tr:hover {
 .modal-content h2 {
     margin-top: 0;
 }
-
 
 
 /*------------------------------------------------------------*/
@@ -669,6 +744,4 @@ tr:hover {
 .donation-table tr:hover {
     background-color: #f5f5f5;
 }
-
-
 

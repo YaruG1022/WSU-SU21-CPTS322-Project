@@ -1,23 +1,5 @@
-﻿<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Generate Report</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="../static/StyleSheet1.css">
-    <script src="../static/js/jquery-3.7.1.min.js"></script>
-    <script src="../static/js/navbar.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.0/xlsx.full.min.js"></script>
-</head>
-<body>
-
-    <div id="navbar"></div>
-    <script>
-        document.getElementById('navbar').innerHTML = generateNavbar();
-    </script>
-
+﻿{% extends 'interface_base.html' %}
+{% block content %}
     <div class="report-container">
         <h1>Generate Report</h1>
         <form id="reportForm">
@@ -126,5 +108,4 @@
             XLSX.writeFile(wb, 'report.xlsx');
         }
     </script>
-</body>
-</html>
+{% endblock %}
