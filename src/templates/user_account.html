@@ -64,18 +64,29 @@
         }
 
         document.querySelectorAll('.editable').forEach(makeEditable);
-        /*
-        document.getElementById('saveBtn').addEventListener('click', function() {
+        
+        document.getElementById('saveBtn').addEventListener('click', async function() {
             // Save changes (e.g., send to server, update UI)
-            const userInfo = {};
+            const userFormData = new FormData();
             document.querySelectorAll('.editable').forEach(item => {
-                userInfo[item.id] = item.textContent;
+                //userInfo[item.id] = item.textContent;
+                userFormData.append(item.id, item.textContent)
             });
-            console.log('Saved user info:', userInfo);
-            alert('User information saved successfully!');
+
+            try {
+                const response = await fetch("{{ url_for('login_bp.update_user_data') }}", {
+                    method: "POST",
+                    // Set the FormData instance as the request body
+                    body: userFormData,
+                });
+                console.log(await response);
+                location.reload()
+            } catch (e) {
+                console.error(e);
+            }
         });
 
-        */
+        
         document.addEventListener('click', function(event) {
             const isClickInside = event.target.closest('.editable') || event.target.closest('.edit-input');
             if (!isClickInside) {

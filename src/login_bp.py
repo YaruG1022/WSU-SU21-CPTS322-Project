@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, make_response
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
 from models import db, User
@@ -93,7 +93,7 @@ def login_test():
 
 IMAGE_EXTENSIONS = { 'png', 'jpg', 'jpeg', 'gif', 'webp', 'jfif'}
 
-@login_bp.route('/upload_profile_image', methods=['POST', 'GET'])
+@login_bp.route('/upload_profile_image', methods=['POST'])
 @login_required
 def upload_pfp():
     user_page = url_for('interface_bp.account_pg')
@@ -134,3 +134,35 @@ def upload_pfp():
         return redirect(user_page)
         
     return redirect(user_page)
+
+@login_bp.route('/update_user_data', methods=['POST'])
+@login_required
+def update_user_data():
+    email = request.form.get("email")
+    username = request.form.get("username")
+
+    # check username length
+    if(len(username) > 48):
+        flash("Username too long, must be 48 characters or shorter.")
+        response = make_response("Updating user data failed.")
+        response.mimetype = "text/plain"
+        return response
+
+    current_user.email = email
+    current_user.name = username
+    db.session.commit()
+
+    flash("User data updated!")
+    response = make_response("User credentials updated.")
+    response.mimetype = "text/plain"
+    return response
+
+@login_bp.route('/update_user_password', methods=['POST'])
+@login_required
+def update_user_password():
+    password = request.form.get("password")
+
+    current_user.password = bcrypt.generate_password_hash(password)
+    flash("Password updated!")
+    return redirect(url_for('interface_bp.account_pg'))
+
