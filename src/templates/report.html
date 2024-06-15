@@ -2,12 +2,12 @@
 {% block content %}
     <div class="report-container">
         <h1>Generate Report</h1>
-        <form id="reportForm">
+        <form id="reportForm" onsubmit="generateReport(); return false;">
             <label for="reportType">Select Report Type:</label>
             <select id="reportType" name="reportType" class="report-select">
                 <option value="inventory">Inventory</option>
                 <option value="donation">Donation</option>
-                <option value="orders">Orders</option>
+                <option value="recipient order">Recipient Order</option>
             </select>
 
             <label for="exportFormat">Select Export Format:</label>
@@ -16,7 +16,7 @@
                 <option value="xls">XLS</option>
             </select>
 
-            <button type="button" class="report-button" onclick="generateReport()">Generate Report</button>
+            <button type="submit" class="report-button">Generate Report</button>
         </form>
 
         <div class="report-search-container">
@@ -43,29 +43,31 @@
         function generateReport() {
             const reportType = document.getElementById('reportType').value;
             const exportFormat = document.getElementById('exportFormat').value;
-            // Fetch data from the server based on the selected report type
-            fetch(`/getReportData?reportType=${reportType}`)
-                .then(response => response.json())
-                .then(data => {
-                    populateTable(data);
-                    if (exportFormat === 'csv') {
-                        exportToCSV(data);
-                    } else if (exportFormat === 'xls') {
-                        exportToXLS(data);
-                    }
-                });
-        }
-
-        function populateTable(data) {
-            const tableBody = document.getElementById('reportTable').getElementsByTagName('tbody')[0];
-            tableBody.innerHTML = '';
-            data.forEach(item => {
-                const row = tableBody.insertRow();
-                row.insertCell(0).innerText = item.name;
-                row.insertCell(1).innerText = item.quantity;
-                row.insertCell(2).innerText = item.category;
-                // Add other necessary cells here
-            });
+            
+            fetch('/generateReport', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ reportType: reportType, exportFormat: exportFormat })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const url = window.URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.style.display = 'none';
+                a.href = url;
+                a.download = exportFormat === 'csv' ? 'report.csv' : 'report.xlsx';
+                document.body.appendChild(a);
+                a.click();
+                window.URL.revokeObjectURL(url);
+            })
+            .catch(error => console.error('Error generating report:', error));
         }
 
         function searchItems() {
@@ -82,30 +84,6 @@
                 }
                 rows[i].style.display = match ? '' : 'none';
             }
-        }
-
-        function exportToCSV(data) {
-            const csvRows = [];
-            const headers = Object.keys(data[0]);
-            csvRows.push(headers.join(','));
-
-            for (const row of data) {
-                const values = headers.map(header => `"${row[header]}"`);
-                csvRows.push(values.join(','));
-            }
-
-            const csvString = csvRows.join('\n');
-            const a = document.createElement('a');
-            a.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvString);
-            a.download = 'report.csv';
-            a.click();
-        }
-
-        function exportToXLS(data) {
-            const ws = XLSX.utils.json_to_sheet(data);
-            const wb = XLSX.utils.book_new();
-            XLSX.utils.book_append_sheet(wb, ws, 'Report');
-            XLSX.writeFile(wb, 'report.xlsx');
         }
     </script>
 {% endblock %}
