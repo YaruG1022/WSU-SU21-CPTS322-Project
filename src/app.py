@@ -10,10 +10,13 @@ from flask_login import LoginManager
 import os
 from login_bp import login_bp, bcrypt
 from interface import interface_bp
+from report_bp import report_bp
 
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
+app.register_blueprint(report_bp) # register report blueprint
+
 
 ###-------- Initialization --------###
 basedir = os.path.abspath(os.path.dirname(__file__))
