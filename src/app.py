@@ -10,6 +10,7 @@ from flask_login import LoginManager
 import os
 from login_bp import login_bp, bcrypt
 from interface import interface_bp
+from report_bp import report_bp
 from sqlalchemy import func
 import werkzeug.exceptions
 from werkzeug.utils import secure_filename
