@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, make_response, redirect
+from flask import Flask, render_template, request, url_for, make_response, redirect, jsonify
 from markupsafe import escape
 
 import secrets
@@ -80,10 +80,11 @@ def additem_test_form():
 def additem_test():
     itm_name = escape(request.form['name'])
     itm_quantity = escape(request.form['quantity'])
+    itm_type = escape(request.form['type'])
     stockdate = datetime.datetime.strptime(request.form['stock-date'], '%Y-%m-%d')
     expdate = datetime.datetime.strptime(request.form['expiry-date'], '%Y-%m-%d')
 
-    Item.addItem(itm_name, itm_quantity, stockdate, expdate)
+    Item.addItem(itm_name, itm_quantity, stockdate, expdate, itm_type)
     resp = make_response(redirect(url_for("success_page")))
     return resp
 

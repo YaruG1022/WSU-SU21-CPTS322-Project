@@ -18,7 +18,7 @@ class User(UserMixin, db.Model):
 class Item(db.Model):
     id = db.Column(db.Integer, primary_key=True) # item ids, automatically increments
     name = db.Column(db.String(255), nullable = False)
-    type = db.Column(db.String(255), nullable = False)
+    type = db.Column(db.String(255), nullable = False) # food, hygiene
     quantity = db.Column(db.Integer, nullable = False)
     stockdate = db.Column(db.Date, nullable = False) # item last stock/restock date
     expdate = db.Column(db.Date, nullable = False) # item expiration date
@@ -28,11 +28,22 @@ class Item(db.Model):
     def __repr__(self):
         return '<ID: %r>' % self.id
     
-    def addItem(item_name, item_quantity, item_stockdate, item_expdate, item_img = None):
+    def serialize(self):
+        return { 
+            'id': self.id,
+            'name': self.name,
+            'type': self.type,
+            'quantity': self.quantity,
+            'stockdate': self.stockdate,
+            'expdate': self.expdate,
+            'image': self.image
+        }
+    
+    def addItem(item_name, item_quantity, item_stockdate, item_expdate, item_type, item_img = None):
         if(item_img is not None):
-            new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate, image = item_img)
+            new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate, type = item_type, image = item_img)
         else:
-            new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate, image = "static/img/placeholder.png")
+            new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate, type = item_type, image = "static/img/placeholder.png")
         db.session.add(new_item)
 
         db.session.commit()

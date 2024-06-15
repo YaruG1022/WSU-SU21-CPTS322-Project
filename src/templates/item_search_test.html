@@ -1,0 +1,68 @@
+{% extends 'interface_base.html' %}
+{% block content %}
+<div style="margin: 0; padding: 5px;">
+<h1>Search items</h1>
+<div id="search-div">
+    <input id="searchbox" name="search" autocomplete="off">
+    <div id="search_dropdown">
+
+    </div>
+</div>
+<form id="item_submit">
+    <input id="item_input" name="item_name" autocomplete="off">
+    <input type="submit">
+</form>
+
+</div>
+
+<script>
+    function set_item(name)
+    {
+        $("#item_input").val(name);
+    }
+    
+    // get item query
+    function getSearchQuery()
+    {
+        $.ajax({
+        url: "{{ url_for('search_item') }}?search=" + $('#searchbox').val(),
+        //force to handle it as text
+        dataType: "text",
+        success: function(data) {
+            var json = $.parseJSON(data);
+            var value = $('#searchbox').val();
+            updateItemList(json, value);
+        }
+        });
+    }
+
+    function updateItemList(data, value)
+    {
+        $('#search_dropdown').html("");
+        for (var i=0; i < data.length; ++i)
+        {
+            $('#search_dropdown').append("<button class='entry' value='" + data[i].name + "'>#" + data[i].id + ": " + data[i].name + "</button><br>");
+        }
+        if(value != "")
+        {
+            $('#search_dropdown').append("<button class='entry' value='" + value + "'>Create new item: " + value + "</button><br>");
+        }
+        $(".entry").click(
+            function() {
+                event.stopPropagation();
+                event.stopImmediatePropagation();
+                set_item($(this).val());
+            }
+        );
+
+    }
+
+    $(function(){
+        $("#searchbox").keyup(
+            function() {
+                getSearchQuery();
+            }
+        )
+    });
+</script>
+{% endblock %}

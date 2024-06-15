@@ -58,9 +58,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var signupLink = document.getElementById("signupLink");
 
     // When the user clicks the login button, open the login modal
-    loginBtn.onclick = function() {
-      loginModal.style.display = "block";
+    if(loginBtn) {
+      loginBtn.onclick = function() {
+        loginModal.style.display = "block";
+      }
     }
+    
 
     // When the user clicks on <span> (x), close the modal
     for (var i = 0; i < closeButtons.length; i++) {
