@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, make_response, redirect
+from flask import Flask, render_template, request, url_for, make_response, redirect, jsonify
 from markupsafe import escape
 
 import secrets
@@ -81,10 +81,11 @@ def additem_test_form():
 def additem_test():
     itm_name = escape(request.form['name'])
     itm_quantity = escape(request.form['quantity'])
+    itm_type = escape(request.form['type'])
     stockdate = datetime.datetime.strptime(request.form['stock-date'], '%Y-%m-%d')
     expdate = datetime.datetime.strptime(request.form['expiry-date'], '%Y-%m-%d')
 
-    Item.addItem(itm_name, itm_quantity, stockdate, expdate)
+    Item.addItem(itm_name, itm_quantity, stockdate, expdate, itm_type)
     resp = make_response(redirect(url_for("success_page")))
     return resp
 
@@ -98,4 +99,26 @@ def listitem_test():
 def success_page():
     return render_template("success.html")
 
+
+@app.route("/item_search_test")
+def item_search_test():
+    return render_template("item_search_test.html")
+
+@app.route("/search_item", methods=['GET'])
+def search_item():
+    query = request.args.get('search')
+    print(query)
+    if(query is None): item_list = Item.query.all()
+    elif(query.isdigit()):
+        item_list = Item.query.filter_by(id = int(query))
+    else:
+        item_list = Item.query.filter(Item.name.ilike("%" + query + "%"))
+    result = ""
+    
+    if(item_list is None):
+        return "No items found."
+    #for itm in item_list:
+    #    result += "(#" + str(itm.id) + "): " + itm.name + " x " + str(itm.quantity) + "<br>" 
+    
+    return jsonify([item.serialize() for item in item_list])
 ###-----------------------###
