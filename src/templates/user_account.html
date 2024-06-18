@@ -7,7 +7,7 @@
             <div class="avatar" id="userAvatar">
                 <img src="{{ current_user.pfp_url }}"></img>
             </div>
-            <form id="avatarForm" method="post" action="{{ url_for('login_bp.upload_pfp') }}" enctype=multipart/form-data>
+            <form id="avatarForm" method="post" action="{{ url_for('login_bp.upload_pfp') }}" enctype="multipart/form-data">
                 <label for="avatarUpload">Change Avatar:</label>
                 <input type="file" id="avatarUpload" name="file">
                 <button type="submit">Upload</button>

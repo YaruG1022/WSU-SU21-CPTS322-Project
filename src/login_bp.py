@@ -165,4 +165,3 @@ def update_user_password():
     current_user.password = bcrypt.generate_password_hash(password)
     flash("Password updated!")
     return redirect(url_for('interface_bp.account_pg'))
-

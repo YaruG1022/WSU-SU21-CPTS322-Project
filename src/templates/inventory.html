@@ -14,6 +14,7 @@
                     <th></th>
                     <th>ID</th>
                     <th>ITEM NAME</th>
+                    <th>ITEM TYPE</th>
                     <th>QUANTITY</th>
                     <th>STOCK DATE</th>
                     <th>EXPIRATION DATE</th>
@@ -23,9 +24,10 @@
                 {% for item in items %}
                     <tr>
                         <td><input type="checkbox"></td>
-                        <td><img src="static/img/placeholder.png" alt="Icon" class="icon"></td>
+                        <td><img src="{{ item['image'] }}" alt="Icon" class="icon"></td>
                         <td>{{ item['id'] }}</td>
                         <td>{{ item['name'] }}</td>
+                        <td>{{ item['type'] }}</td>
                         <td>{{ item['quantity'] }}</td>
                         <td>{{ item['stockdate'] }}</td>
                         <td>{{ item['expdate'] }}</td>

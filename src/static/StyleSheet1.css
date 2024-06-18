@@ -746,10 +746,23 @@ tr:hover {
 }
 
 #search_dropdown {
-    width: 25%;
+    width: 250px;
     height: 150px;
     position: relative;
     padding: 5px;
     overflow: scroll;
     border: 1px solid black;
+}
+
+.donation-date {
+    float: left;
+    margin-left: 5px;
+    padding-left: 5px;
+    border-left: 1px solid black;
+    
+}
+
+#donation-date-container {
+    padding-bottom: 12px;
+    height: 50px;
 }
