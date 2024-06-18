@@ -13,10 +13,13 @@ from interface import interface_bp
 from sqlalchemy import func
 import werkzeug.exceptions
 from werkzeug.utils import secure_filename
+from report_bp import report_bp
 
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
+app.register_blueprint(report_bp) # register report blueprint
+
 
 ###-------- Initialization --------###
 basedir = os.path.abspath(os.path.dirname(__file__))
