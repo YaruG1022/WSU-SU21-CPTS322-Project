@@ -20,19 +20,17 @@ app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
 app.register_blueprint(report_bp) # register report blueprint
 
-
 ###-------- Initialization --------###
 basedir = os.path.abspath(os.path.dirname(__file__))
 
-# Create crucial empty directories if they do not exist
-if(os.path.isdir('data') == False):
-    os.makedirs(os.path.join(basedir, "data"))
-if(os.path.isdir('static/img/profiles') == False or os.path.isdir('static/img/items') == False):
-    os.makedirs(os.path.join(basedir, "static/img/profiles"))
-    os.makedirs(os.path.join(basedir, "static/img/items"))
+# Generate crucial directories
+# Note: default_profile.png is important, do not delete
+required_folders = [ "data/", "static/img", "static/img/items", "static/img/profiles"]
 
-# Temporary item database to test in development (./data/test.db)
-basedir = os.path.abspath(os.path.dirname(__file__))
+for dir in required_folders:
+    if(os.path.isdir(dir) == False):
+        os.makedirs(os.path.join(basedir, dir))
+
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
 # image upload base url
 app.config['IMG_URL'] = "static/img/"
@@ -179,7 +177,6 @@ def listitem_test():
 @app.route("/success")
 def success_page():
     return render_template("success.html")
-
 
 @app.route("/item_search_test")
 def item_search_test():
