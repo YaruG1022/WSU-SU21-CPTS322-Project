@@ -13,6 +13,7 @@ setup(
         'Flask-SQLAlchemy',
         'flask-bcrypt',
         'flask-login',
-        'markupsafe'
+        'markupsafe',
+        'pandas'
     ]
 ) 
