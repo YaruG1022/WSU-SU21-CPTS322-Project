@@ -40,10 +40,7 @@ class Item(db.Model):
         }
     
     def addItem(item_name, item_quantity, item_stockdate, item_expdate, item_type, item_img = None):
-        if(item_img is not None):
-            new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate, type = item_type, image = item_img)
-        else:
-            new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate, type = item_type, image = "static/img/placeholder.png")
+        new_item = Item(name = item_name, quantity = item_quantity, stockdate = item_stockdate, expdate = item_expdate, type = item_type, image = item_img)
         db.session.add(new_item)
 
         db.session.commit()
