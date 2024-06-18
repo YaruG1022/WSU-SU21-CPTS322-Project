@@ -766,3 +766,13 @@ tr:hover {
     padding-bottom: 12px;
     height: 50px;
 }
+
+.warning {
+    background-color: #ffa3a3;
+    border: 1px solid red;
+    border-radius: 5px;
+    padding: 4px;
+    width: 75%;
+    color: black;
+    margin: 5px;
+}

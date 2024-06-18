@@ -12,13 +12,13 @@
                 <input type="file" id="avatarUpload" name="file">
                 <button type="submit">Upload</button>
             </form>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
             <div class="warning">
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <p>{{ messages[0] }}</p>
-                {% endif %}
-                {% endwith %}
+            <p>{{ messages[0] }}</p>
             </div>
+            {% endif %}
+            {% endwith %}
             <ul class="user-details">
                 {% with user = current_user %}
                 {% if user.is_authenticated %}
