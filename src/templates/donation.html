@@ -37,13 +37,14 @@
             <p>Please fill in this form to add your donation.</p>
             <hr>
             
+            
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
             <div class="warning">
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                <p>{{ messages[0] }}</p>
-                {% endif %}
-                {% endwith %}
+            <p>{{ messages[0] }}</p>
             </div>
+            {% endif %}
+            {% endwith %}
 
             <label for="item"><b>Search product name/ID: </b></label>
             <div id="search-div">
@@ -68,6 +69,7 @@
             <div id="donation-date-container">
                 <div class="donation-date">
                     <label for="stockdate"><b>Stock date:</b></label><br>
+                    <br>
                     <input type="date" name="stock-date" required>
                 </div>
                 <div class="donation-date">
