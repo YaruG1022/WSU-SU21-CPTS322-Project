@@ -25,7 +25,7 @@ def get_db_connection():
 
 # Route to render the report page
 @report_bp.route('/report')
-def report():
+def report_pg():
     return render_template('report.html')
 
 # Route to fetch report data based on report type
@@ -55,19 +55,27 @@ def get_report_data():
         return jsonify({'error': 'Database connection failed'}), 500
 
     try:
+        # Fetch column names
+        cursor = conn.cursor()
+        cursor.execute(f'PRAGMA table_info({table_name})')
+        columns = [col[1] for col in cursor.fetchall()]
+
         # Query to select all data from the specified table
         query = f'SELECT * FROM {table_name}'
-        data = conn.execute(query).fetchall()
+        data = cursor.execute(query).fetchall()
         conn.close()
 
         # Convert the data to a list of dictionaries
-        result = [dict(row) for row in data]
+        result = {
+            'columns': columns,
+            'data': [dict(row) for row in data]
+        }
         return jsonify(result)
     except Exception as e:
         # Log any errors that occur during data fetching
         logger.error(f"Error fetching data: {e}")
         return jsonify({'error': 'Failed to fetch data'}), 500
-
+    
 # Route to generate and download the report
 @report_bp.route('/generateReport', methods=['POST'])
 def generate_report():
