@@ -53,10 +53,23 @@ pip install -e .
 ````
 #### Running
 
-To run the **development server**, cd into the src directory and run:
+To run the **development server**, enter the src directory (``cd src``) and run:
 ````
-flask run
+python app.py
 ````
+
+## Using TLS Encryption
+
+To configure the server to use HTTPS, ``SSL_Enabled`` must be set to ``True`` in ``server.ini``.
+
+Without manually set certificates, the server will use a temporary "ad-hoc" certificate. This will cause the browser to give a warning (which can be dismissed in Chrome by clicking ``Advanced -> Proceed to [address] (unsafe)`` or in Firefox with ``Advanced -> Add Exception``). Keep in mind that this will still create a secure, encrypted connection.
+
+To circumvent this, you can
+- Create a self signed certificate using openSSL, import it in the user's browser.
+- Use a service like LetsEncrypt to generate a certificate for your server.
+
+Then put your certificates in the ``src/certs/`` folder and add their filenames in ``server.ini`` under ``Server_Certificate`` and ``Server_Key``
+
 
 ## Functionality
 
