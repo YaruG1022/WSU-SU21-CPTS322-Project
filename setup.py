@@ -14,6 +14,7 @@ setup(
         'flask-bcrypt',
         'flask-login',
         'markupsafe',
-        'pandas'
+        'pandas',
+        'configparser'
     ]
 ) 

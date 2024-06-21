@@ -15,10 +15,16 @@ import werkzeug.exceptions
 from werkzeug.utils import secure_filename
 from report_bp import report_bp
 
+import configparser
+
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
 app.register_blueprint(report_bp) # register report blueprint
+
+config = configparser.ConfigParser()
+config.read('server.ini')
+
 
 ###-------- Initialization --------###
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -200,3 +206,32 @@ def search_item():
     
     return jsonify([item.serialize() for item in item_list])
 ###-----------------------###
+
+if __name__ == "__main__":
+    if(config['SSL'].getboolean('SSL_Enabled') == True):
+        # get certificates from server.ini
+        ssl_cert_dir = config['SSL']['Server_Certificate']
+        ssl_key_dir = config['SSL']['Server_Key']
+        if(ssl_cert_dir is None or ssl_key_dir is None):
+            print("NOTICE: No SSL key or certificate set, using dummy certificate.")
+            app.run(ssl_context='adhoc') # use adhoc ssl certificate
+        else:
+            cert_folder = os.path.join(basedir, "certs/")
+            ssl_cert_fulldirectory = os.path.join(cert_folder, ssl_cert_dir)
+            ssl_key_fulldirectory = os.path.join(cert_folder, ssl_key_dir)
+            # check that cert/key files exist 
+            if(os.path.isfile(ssl_cert_fulldirectory) and os.path.isfile(ssl_key_fulldirectory)):
+                print("NOTICE: Using ssl certificate " + ssl_cert_dir + " and key " + ssl_key_dir)
+
+
+                context = (ssl_cert_fulldirectory, ssl_key_fulldirectory)
+                app.run(ssl_context=context)
+            else:
+                print("NOTICE: SSL certificate or key not found. Check that the files are in src/certs/ and named properly in server.ini")
+                print("NOTICE: No SSL key or certificate set, using dummy certificate.")
+                app.run(ssl_context='adhoc')
+    else:
+        # run without SSL
+        print("NOTICE: Running without TLS encryption.")
+        app.run()
+    
