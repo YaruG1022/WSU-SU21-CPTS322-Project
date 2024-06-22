@@ -225,13 +225,13 @@ if __name__ == "__main__":
 
 
                 context = (ssl_cert_fulldirectory, ssl_key_fulldirectory)
-                app.run(ssl_context=context)
+                app.run(host='0.0.0.0', port=5000, ssl_context=context)
             else:
                 print("NOTICE: SSL certificate or key not found. Check that the files are in src/certs/ and named properly in server.ini")
                 print("NOTICE: No SSL key or certificate set, using dummy certificate.")
-                app.run(ssl_context='adhoc')
+                app.run(host='0.0.0.0', port=5000, ssl_context='adhoc')
     else:
         # run without SSL
         print("NOTICE: Running without TLS encryption.")
-        app.run()
+        app.run(host='0.0.0.0', port=5000)
     

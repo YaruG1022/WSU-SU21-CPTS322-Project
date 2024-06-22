@@ -58,6 +58,10 @@ To run the **development server**, enter the src directory (``cd src``) and run:
 python app.py
 ````
 
+### Accessing on other devices
+
+If connecting to the server's IP address doesn't work on other devices and the server is using Windows, make sure to set the Wifi network to a private network and then disable Microsoft Defender Firewall.
+
 ## Using TLS Encryption
 
 To configure the server to use HTTPS, ``SSL_Enabled`` must be set to ``True`` in ``server.ini``.
