@@ -15,6 +15,8 @@ setup(
         'flask-login',
         'markupsafe',
         'pandas',
-        'configparser'
+        'configparser',
+        'pyotp',
+        'qrcode'
     ]
 ) 

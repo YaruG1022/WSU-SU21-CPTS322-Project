@@ -5,6 +5,8 @@ from models import db, User
 import werkzeug.exceptions
 from werkzeug.utils import secure_filename
 import os
+import server_utils
+
 
 login_bp = Blueprint('login_bp', __name__)
 bcrypt = Bcrypt()
@@ -36,22 +38,22 @@ def signup():
         flash('Email address already in use')
         return redirect(redir + "?signup")
     
-    default_pfp_dir = os.path.join(current_app.config['IMG_URL'], "profiles/default_profile.png")
 
-    new_user = User(email=email, name=name, password=bcrypt.generate_password_hash(password), pfp_url = default_pfp_dir)
+    new_user = User(email=email, name=name, password=password)
     db.session.add(new_user)
     db.session.commit()
-    flash('Successfully signed up')
-    return redirect(redir + "?login")
+    login_user(new_user)
 
-# login functions
-# login form
+    flash('Successfully signed up')
+    return redirect(redir)
+
+# LOGIN FORM
 @login_bp.route('/login_form')
 def login_form():
     return render_template("login_form_test.html")
 
 
-# login action
+# LOGIN ACTION
 @login_bp.route('/login', methods=['POST'])
 def login():
     # get form data
@@ -77,6 +79,17 @@ def login():
     flash('Login failed, incorrect username or password.')
     return redirect(redir + "?login")
 
+## OTP
+# @login_bp.route('/verify_otp', methods=['POST'])
+# def verify_otp():
+#    pass
+
+# @login_bp.route('/verify_otp', methods=['POST'])
+# def verify_otp():
+#    pass
+
+
+
 # pages that need a login to view
 
 @login_bp.route('/log_out')
@@ -91,49 +104,31 @@ def log_out():
 def login_test():
     return render_template('login_check.html', username=current_user.name)
 
-IMAGE_EXTENSIONS = { 'png', 'jpg', 'jpeg', 'gif', 'webp', 'jfif'}
+## UPLOAD PFP
+
 
 @login_bp.route('/upload_profile_image', methods=['POST'])
 @login_required
 def upload_pfp():
     user_page = url_for('interface_bp.account_pg')
-
-    # get image upload directory
-    upload_dir = os.path.join(current_app.config['IMG_URL'], "profiles/")
     # check if a file was uploaded
     if 'file' not in request.files:
         flash('Profile image file not uploaded.')
         return redirect(user_page)
     file = request.files['file']
-    # check filename isnt empty
-    if file.filename == '':
-        flash("Empty file name")
+
+    upload_success = server_utils.upload_image(file, "profiles", current_user.id)
+
+    if(upload_success[0] == False):
+        flash(upload_success[1])
         return redirect(user_page)
-    # check file is allowed
-    if '.' in file.filename: 
-        file_extension = file.filename.rsplit('.', 1)[1].lower()
-        filename = secure_filename(str(current_user.id) + "." + file_extension)
-        if(file_extension in IMAGE_EXTENSIONS):
-            try:
-                # save file to directory
-                path = os.path.join(upload_dir, filename)
-                file.save(path)
-                current_user.pfp_url = path
-                db.session.commit()
-            except werkzeug.exceptions.RequestEntityTooLarge:
-                # Uploaded file broke file size limit
-                flash("Uploaded file too large, max file size is " + current_app.config['MAX_CONTENT_LENGTH'] / (1000000) + " MB")
-                return redirect(user_page)
-        else:
-            # invalid extension
-            flash("Invalid file type. Uploaded image must be a PNG, JPEG, GIF, WEBP, or JFIF.")
-            return redirect(user_page)
     else:
-        # filename has no extension
-        flash("Invalid file name.")
-        return redirect(user_page)
-        
+        current_user.pfp_url = upload_success[1]
+        db.session.commit()
+
     return redirect(user_page)
+
+## UPDATE USER DATA
 
 @login_bp.route('/update_user_data', methods=['POST'])
 @login_required
@@ -165,3 +160,4 @@ def update_user_password():
     current_user.password = bcrypt.generate_password_hash(password)
     flash("Password updated!")
     return redirect(url_for('interface_bp.account_pg'))
+

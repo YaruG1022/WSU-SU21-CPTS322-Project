@@ -14,8 +14,8 @@ from sqlalchemy import func
 import werkzeug.exceptions
 from werkzeug.utils import secure_filename
 from report_bp import report_bp
-
 import configparser
+import server_utils
 
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
@@ -37,11 +37,12 @@ for dir in required_folders:
     if(os.path.isdir(dir) == False):
         os.makedirs(os.path.join(basedir, dir))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/inventory.db")
 # image upload base url
 app.config['IMG_URL'] = "static/img/"
 # max file size
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
+
 
 # generate secret key if it doesn't exist
 SECRET_FILE_PATH = Path("secret.txt")
@@ -129,37 +130,30 @@ def additem():
         # no file uploaded, use default
         img_path = os.path.join(app.config['IMG_URL'], 'placeholder.png')
     else: 
-        upload_dir = os.path.join(app.config['IMG_URL'], "items/")
-        IMAGE_EXTENSIONS = { 'png', 'jpg', 'jpeg', 'gif', 'webp', 'jfif'}
-        
-        # get highest ID and add 1
-        new_id = db.session.query(func.max(Item.id)).scalar() + 1
-        
-        file = request.files['item-image'] # get file
-        if file.filename == '': # check if not empty filename
-            flash("Empty file name")
-            return redirect(donation_page)
-        if '.' in file.filename:
-            file_extension = file.filename.rsplit('.', 1)[1].lower()
-            filename = secure_filename(str(new_id) + "." + file_extension)
-            if(file_extension in IMAGE_EXTENSIONS):
-                try:
-                    # save file to directory
-                    path = os.path.join(upload_dir, filename)
-                    file.save(path)
-                    img_path = path
-                except werkzeug.exceptions.RequestEntityTooLarge:
-                    # Uploaded file broke file size limit
-                    flash("Uploaded file too large, max file size is " + current_app.config['MAX_CONTENT_LENGTH'] / (1000000) + " MB")
-                    return redirect(donation_page)
+        ## Get image filename
+        if(itm_id == "" or itm_id is None):
+            ## is column empty?
+            if(len(Item.query.all()) != 0):
+                img_name = db.session.query(func.max(Item.id)).scalar() + 1 # new item
             else:
-                # invalid extension
-                flash("Invalid file type. Uploaded image must be a PNG, JPEG, GIF, WEBP, or JFIF.")
-                return redirect(donation_page)
+                img_name = "1"
+        else:
+            img_name = itm_id # existing item
+        
+        upload_success = server_utils.upload_image(request.files['item-image'], "profiles", img_name)
 
+        if(upload_success[0] == False):
+            flash(upload_success[1])
+            return redirect(donation_page)
+
+        else:
+            img_path = upload_success[1]
+
+    ## New item
     if(itm_id == "" or itm_id is None):
         print(img_path)
         Item.addItem(itm_name, itm_quantity, stockdate, expdate, itm_type, img_path)
+    # Updating item
     elif(itm_type is None):
         itm = Item.query.filter_by(id = itm_id).first()
         itm.quantity += int(itm_quantity)
@@ -167,6 +161,7 @@ def additem():
         itm.expdate = expdate
         itm.image = img_path
         db.session.commit()
+    #error
     else:
         flash("Select a valid item type if creating a new item.")
         return redirect(donation_page)

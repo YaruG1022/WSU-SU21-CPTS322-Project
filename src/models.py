@@ -2,17 +2,44 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import UserMixin
 import datetime
 from flask import current_app
+from flask_bcrypt import Bcrypt
+import pyotp
+import os
 
 db = SQLAlchemy()
+bcrypt = Bcrypt()
+
+
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True) # automatically increments
-    email = db.Column(db.String(255), unique=True) # duplicate emails not allowed
-    password = db.Column(db.String(255))
-    name = db.Column(db.String(255))
+    email = db.Column(db.String(255), unique=True, nullable=False) # duplicate emails not allowed
+    password = db.Column(db.String(255), nullable=False)
+    name = db.Column(db.String(255), nullable=False)
     pfp_url = db.Column(db.String(255))
+    joindate = db.Column(db.DateTime, nullable=False)
+    is_2fa_enabled = db.Column(db.Boolean, nullable = False, default = False)
+    token_2fa = db.Column(db.String, unique=True)
+
+    def __init__(self, email, name, password):
+        default_pfp_dir = os.path.join(current_app.config['IMG_URL'], "profiles/default_profile.png")
+
+        self.email = email
+        self.name = name
+        self.password = bcrypt.generate_password_hash(password)
+        self.joindate = datetime.datetime.now()
+        self.token_2fa = pyotp.random_base32()
+        self.pfp_url = default_pfp_dir
+        
 
     def __repr__(self):
         return '<Email: %r>' % self.email
+    
+    def get_2fa_url(self):
+        return pyotp.totp.TOTP(self.token_2fa).provisioning_uri(name = self.email, issuer_name=current_app.name)
+    
+    def verify_otp(self, user_otp):
+        totp = pyotp.parse_uri(self.get_2fa_url())
+        return totp.verify(user_otp)
 
 ## Item model
 class Item(db.Model):
