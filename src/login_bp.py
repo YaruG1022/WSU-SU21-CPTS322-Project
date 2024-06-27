@@ -1,10 +1,12 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, make_response
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, make_response, session
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
 from models import db, User
 import werkzeug.exceptions
 from werkzeug.utils import secure_filename
 import os
+import server_utils
+
 
 login_bp = Blueprint('login_bp', __name__)
 bcrypt = Bcrypt()
@@ -36,29 +38,28 @@ def signup():
         flash('Email address already in use')
         return redirect(redir + "?signup")
     
-    default_pfp_dir = os.path.join(current_app.config['IMG_URL'], "profiles/default_profile.png")
 
-    new_user = User(email=email, name=name, password=bcrypt.generate_password_hash(password), pfp_url = default_pfp_dir)
+    new_user = User(email=email, name=name, password=password)
     db.session.add(new_user)
     db.session.commit()
-    flash('Successfully signed up')
-    return redirect(redir + "?login")
+    login_user(new_user)
 
-# login functions
-# login form
+    flash('Successfully signed up')
+    return redirect(redir)
+
+# LOGIN FORM
 @login_bp.route('/login_form')
 def login_form():
     return render_template("login_form_test.html")
 
 
-# login action
+# LOGIN ACTION
 @login_bp.route('/login', methods=['POST'])
 def login():
     # get form data
     email = request.form.get('email')
     password = request.form.get('password')
-    remember = request.form.get('remember')
-
+    remember = request.form.get('remember', default = False)
     # redirect path
     redir = request.form.get('redir')
 
@@ -66,16 +67,74 @@ def login():
     user = User.query.filter_by(email=email).first()
     # validate credentials
     if (user) and (bcrypt.check_password_hash(user.password, password)):
-        user.authenticated = True
-        db.session.add(user)
-        db.session.commit()
-        login_user(user, remember=remember)
+        if(user.is_2fa_enabled == True): # 2FA is enabled
+            session["email"] = email # store user email in session to use with the OTP form (can't be modified on user end)
+            if(redir is not None):
+                return redirect(url_for("login_bp.otp_check") + "?remember=" + str(remember) + "&redir=" + redir)
+            else:
+                return redirect(url_for("login_bp.otp_check") + "?remember=" + str(remember))
+        else:
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=remember)
         # correct login
         return redirect(redir)
     
     # incorrect login
     flash('Login failed, incorrect username or password.')
     return redirect(redir + "?login")
+
+## OTP
+# OTP checking form
+@login_bp.route('/otp_check', methods=['POST', 'GET'])
+def otp_check():
+    if(session['email'] is None):
+        return redirect("/")
+    # redirect path and remember option
+    redir = request.args.get('redir', default="/")
+    remember = request.args.get('remember', default=False, type=bool)
+
+    return render_template("otp_check.html", redir = redir, remember = remember)
+
+@login_bp.route('/verify_otp', methods=['POST'])
+def verify_otp():
+    
+    if(current_user.is_authenticated):
+        # user is doing 2fa setup or adding a new device
+        code = request.form["code"]
+        if current_user.verify_otp(code) is True: 
+            current_user.is_2fa_enabled = True
+            db.session.commit()
+            flash("2FA successfully enabled!")
+            return redirect(url_for("interface_bp.account_pg"))
+        else:
+            flash("Incorrect code.")
+            return redirect(url_for("login_bp.setup_otp"))
+    else:
+        code = request.form.get("code", default="")
+        redir = request.form.get("redir", default="/")
+        remember = request.form.get("remember", default=False, type=bool)
+        user = User.query.filter_by(email=session["email"]).first() # get user based on session email
+
+        if user.verify_otp(code) is True: # code is correct, log in user
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=remember)
+            return redirect(redir)
+        else: # code is incorrect
+            flash("Incorrect code.")
+            return redirect(url_for("login_bp.otp_check") + "?remember=" + str(remember))
+    
+#OTP setup page
+@login_bp.route('/setup_otp')
+@login_required
+def setup_otp():
+   return(render_template("otp_setup.html"))
+   pass
+
+
 
 # pages that need a login to view
 
@@ -91,49 +150,31 @@ def log_out():
 def login_test():
     return render_template('login_check.html', username=current_user.name)
 
-IMAGE_EXTENSIONS = { 'png', 'jpg', 'jpeg', 'gif', 'webp', 'jfif'}
+## UPLOAD PFP
+
 
 @login_bp.route('/upload_profile_image', methods=['POST'])
 @login_required
 def upload_pfp():
     user_page = url_for('interface_bp.account_pg')
-
-    # get image upload directory
-    upload_dir = os.path.join(current_app.config['IMG_URL'], "profiles/")
     # check if a file was uploaded
     if 'file' not in request.files:
         flash('Profile image file not uploaded.')
         return redirect(user_page)
     file = request.files['file']
-    # check filename isnt empty
-    if file.filename == '':
-        flash("Empty file name")
+
+    upload_success = server_utils.upload_image(file, "profiles", current_user.id)
+
+    if(upload_success[0] == False):
+        flash(upload_success[1])
         return redirect(user_page)
-    # check file is allowed
-    if '.' in file.filename: 
-        file_extension = file.filename.rsplit('.', 1)[1].lower()
-        filename = secure_filename(str(current_user.id) + "." + file_extension)
-        if(file_extension in IMAGE_EXTENSIONS):
-            try:
-                # save file to directory
-                path = os.path.join(upload_dir, filename)
-                file.save(path)
-                current_user.pfp_url = path
-                db.session.commit()
-            except werkzeug.exceptions.RequestEntityTooLarge:
-                # Uploaded file broke file size limit
-                flash("Uploaded file too large, max file size is " + current_app.config['MAX_CONTENT_LENGTH'] / (1000000) + " MB")
-                return redirect(user_page)
-        else:
-            # invalid extension
-            flash("Invalid file type. Uploaded image must be a PNG, JPEG, GIF, WEBP, or JFIF.")
-            return redirect(user_page)
     else:
-        # filename has no extension
-        flash("Invalid file name.")
-        return redirect(user_page)
-        
+        current_user.pfp_url = upload_success[1]
+        db.session.commit()
+
     return redirect(user_page)
+
+## UPDATE USER DATA
 
 @login_bp.route('/update_user_data', methods=['POST'])
 @login_required

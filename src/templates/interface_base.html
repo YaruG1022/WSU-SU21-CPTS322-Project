@@ -7,17 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="../static/StyleSheet1.css">
+    <link rel="stylesheet" href="../static/homepage_style.css">
+    <link rel="stylesheet" href="../static/report_style.css">
+
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script src="../static/js/jquery-3.7.1.min.js"></script>
     <script src="../static/js/navbar.js"></script>
+    <script src="../static/js/slideshow.js"></script>
+
 
     <script>
             const navItems = [
                 { name: 'Home', path: "{{ url_for('interface_bp.home_page') }}" },
                 { name: 'Inventory', path: "{{ url_for('interface_bp.inventory_pg') }}" },
                 { name: 'Donation', path: "{{ url_for('interface_bp.donation_pg') }}" },
-                { name: 'Order Now', path: "{{ url_for('interface_bp.transaction_pg') }}" },
+                { name: 'Recipient Order', path: "{{ url_for('interface_bp.transaction_pg') }}" },
                 {% if current_user.is_authenticated %}
                     { name: '{{ current_user.name }}', path: '{{ url_for('interface_bp.account_pg') }}', style: 'float: right; padding: 14px 16px;', id: 'userBtn', img: '{{ current_user.pfp_url }}'},
                     { name: 'Log out', path: '{{ url_for('login_bp.log_out') }}', style: 'float: right; padding: 14px 16px;', icon: 'fa fa-sign-out', id: 'logOutBtn'}
@@ -47,13 +52,15 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('loginModal');">&times;</span>
             <h2>Login</h2>
-            <div class="warning">
+            
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
+                <div class="warning">
                     <p>{{ messages[0] }}</p>
+                </div>
                 {% endif %}
                 {% endwith %}
-            </div>
+            
             <form id="loginForm" action="{{ url_for('login_bp.login') }}" method='post'>
                 <label for="email">Email:</label>
                 <input type="text" id="email" name="email"><br><br>
@@ -71,13 +78,14 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('signupModal');">&times;</span>
             <h2>Sign Up</h2>
-            <div class="warning">
+            
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
+                <div class="warning">
                     <p>{{ messages[0] }}</p>
+                </div>
                 {% endif %}
                 {% endwith %}
-            </div>
             <form id="signupForm" action="{{ url_for('login_bp.signup') }}" method='post'>
                 <label for="email">Email:</label>
                 <input type="text" id="email" name="email"><br><br>

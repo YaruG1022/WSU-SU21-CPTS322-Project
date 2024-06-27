@@ -5,59 +5,34 @@
             <button class="fa fa-plus"><alt="Add"> Add</button>
             <button class="fa fa-edit"><alt="Update"> Update</button>
             <button class="fa fa-remove"><alt="Delete"> Delete</button>
-            <a href="report.html" style="float: center; padding: 14px 16px;" title="Generate report"><i class="fa fa-file"></i></a>
+            <a href="{{ url_for('interface_bp.report_pg') }}" style="float: center; padding: 14px 16px;" title="Generate report"><i class="fa fa-file"></i></a>
         </div>
         <table>
             <thead>
                 <tr>
                     <th></th>
                     <th></th>
-                    <th>DATE ADDED</th>
-                    <th>USABLE UNTIL</th>
-                    <th>STATUS</th>
-                    <th>ITEMS</th>
-                    <th>RECIPIENT</th>
+                    <th>ID</th>
+                    <th>ITEM NAME</th>
+                    <th>ITEM TYPE</th>
+                    <th>QUANTITY</th>
+                    <th>STOCK DATE</th>
+                    <th>EXPIRATION DATE</th>
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
-                    <td>05/30/2024 15:47</td>
-                    <td>---</td>
-                    <td>N/A</td>
-                    <td><a href="#" class="order-link">ID</a> Description<br> Description</td>
-                    <td>Name<br>Address</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
-                    <td>05/30/2024 15:47</td>
-                    <td>---</td>
-                    <td>N/A</td>
-                    <td><a href="#" class="order-link">ID</a> Description</td>
-                    <td>Name<br>Address</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
-                    <td>05/30/2024 15:47</td>
-                    <td>---</td>
-                    <td>N/A</td>
-                    <td><a href="#" class="order-link">ID</a> Description</td>
-                    <td>Name<br>Address</td>
-                </tr>
-                <tr>
-                    <td><input type="checkbox"></td>
-                    <td><img src="placeholder.png" alt="Icon" class="icon"></td>
-                    <td>05/30/2024 15:47</td>
-                    <td>---</td>
-                    <td>N/A</td>
-                    <td><a href="#" class="order-link">ID</a> Description</td>
-                    <td>Name<br>Address</td>
-                </tr>
-
-            
+                {% for item in items %}
+                    <tr>
+                        <td><input type="checkbox"></td>
+                        <td><img src="{{ item['image'] }}" alt="Icon" class="icon"></td>
+                        <td>{{ item['id'] }}</td>
+                        <td>{{ item['name'] }}</td>
+                        <td>{{ item['type'] }}</td>
+                        <td>{{ item['quantity'] }}</td>
+                        <td>{{ item['stockdate'] }}</td>
+                        <td>{{ item['expdate'] }}</td>
+                    </tr>
+                {% endfor %}           
             </tbody>
         </table>
     </div>

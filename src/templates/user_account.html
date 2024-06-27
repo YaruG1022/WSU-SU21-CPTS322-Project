@@ -7,24 +7,26 @@
             <div class="avatar" id="userAvatar">
                 <img src="{{ current_user.pfp_url }}"></img>
             </div>
-            <form id="avatarForm" method="post" action="{{ url_for('login_bp.upload_pfp') }}" enctype=multipart/form-data>
+            <form id="avatarForm" method="post" action="{{ url_for('login_bp.upload_pfp') }}" enctype="multipart/form-data">
                 <label for="avatarUpload">Change Avatar:</label>
                 <input type="file" id="avatarUpload" name="file">
                 <button type="submit">Upload</button>
             </form>
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
             <div class="warning">
-                {% with messages = get_flashed_messages() %}
-                {% if messages %}
-                    <p>{{ messages[0] }}</p>
-                {% endif %}
-                {% endwith %}
+            <p>{{ messages[0] }}</p>
             </div>
+            {% endif %}
+            {% endwith %}
             <ul class="user-details">
                 {% with user = current_user %}
                 {% if user.is_authenticated %}
                     <li>Name: <span class="editable" id="username">{{ user.name }}</span></li>
                     <li>Email: <span class="editable" id="email">{{ user.email }}</span></li>
                     <li>Account ID: <span id="accountId">{{ user.id }}</span></li>
+
+                    <a href="{{ url_for('login_bp.setup_otp')}}">Set up 2-Factor Authentication</a>
                 {% else %}
                     <li>Name: <span class="editable" id="username">N/A</span></li>
                     <li>Email: <span class="editable" id="email">N/A</span></li>
