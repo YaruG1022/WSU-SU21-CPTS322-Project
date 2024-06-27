@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, make_response
+from flask import Blueprint, render_template, request, redirect, url_for, flash, current_app, make_response, session
 from flask_bcrypt import Bcrypt
 from flask_login import login_user, login_required, logout_user, current_user
 from models import db, User
@@ -59,8 +59,7 @@ def login():
     # get form data
     email = request.form.get('email')
     password = request.form.get('password')
-    remember = request.form.get('remember')
-
+    remember = request.form.get('remember', default = False)
     # redirect path
     redir = request.form.get('redir')
 
@@ -68,10 +67,17 @@ def login():
     user = User.query.filter_by(email=email).first()
     # validate credentials
     if (user) and (bcrypt.check_password_hash(user.password, password)):
-        user.authenticated = True
-        db.session.add(user)
-        db.session.commit()
-        login_user(user, remember=remember)
+        if(user.is_2fa_enabled == True): # 2FA is enabled
+            session["email"] = email # store user email in session to use with the OTP form (can't be modified on user end)
+            if(redir is not None):
+                return redirect(url_for("login_bp.otp_check") + "?remember=" + str(remember) + "&redir=" + redir)
+            else:
+                return redirect(url_for("login_bp.otp_check") + "?remember=" + str(remember))
+        else:
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=remember)
         # correct login
         return redirect(redir)
     
@@ -80,13 +86,53 @@ def login():
     return redirect(redir + "?login")
 
 ## OTP
-# @login_bp.route('/verify_otp', methods=['POST'])
-# def verify_otp():
-#    pass
+# OTP checking form
+@login_bp.route('/otp_check', methods=['POST', 'GET'])
+def otp_check():
+    if(session['email'] is None):
+        return redirect("/")
+    # redirect path and remember option
+    redir = request.args.get('redir', default="/")
+    remember = request.args.get('remember', default=False, type=bool)
 
-# @login_bp.route('/verify_otp', methods=['POST'])
-# def verify_otp():
-#    pass
+    return render_template("otp_check.html", redir = redir, remember = remember)
+
+@login_bp.route('/verify_otp', methods=['POST'])
+def verify_otp():
+    
+    if(current_user.is_authenticated):
+        # user is doing 2fa setup or adding a new device
+        code = request.form["code"]
+        if current_user.verify_otp(code) is True: 
+            current_user.is_2fa_enabled = True
+            db.session.commit()
+            flash("2FA successfully enabled!")
+            return redirect(url_for("interface_bp.account_pg"))
+        else:
+            flash("Incorrect code.")
+            return redirect(url_for("login_bp.setup_otp"))
+    else:
+        code = request.form.get("code", default="")
+        redir = request.form.get("redir", default="/")
+        remember = request.form.get("remember", default=False, type=bool)
+        user = User.query.filter_by(email=session["email"]).first() # get user based on session email
+
+        if user.verify_otp(code) is True: # code is correct, log in user
+            user.authenticated = True
+            db.session.add(user)
+            db.session.commit()
+            login_user(user, remember=remember)
+            return redirect(redir)
+        else: # code is incorrect
+            flash("Incorrect code.")
+            return redirect(url_for("login_bp.otp_check") + "?remember=" + str(remember))
+    
+#OTP setup page
+@login_bp.route('/setup_otp')
+@login_required
+def setup_otp():
+   return(render_template("otp_setup.html"))
+   pass
 
 
 

@@ -12,3 +12,4 @@ src/static/img/
 src/certs/*.crt
 src/certs/*.key
 src/certs/*.pem
+src/data/inventory.db
