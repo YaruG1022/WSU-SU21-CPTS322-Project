@@ -81,27 +81,6 @@ create_db()
 
 ###-------- Routes --------###
 
-
-@app.route("/")
-def index():
-    return render_template("index.html")
-
-@app.route("/item_form")
-def additem_test_form():
-    return render_template("additem_form.html")
-
-@app.route("/additem_test", methods=['GET', 'POST'])
-def additem_test():
-    itm_name = escape(request.form['name'])
-    itm_quantity = escape(request.form['quantity'])
-    itm_type = escape(request.form['type'])
-    stockdate = datetime.datetime.strptime(request.form['stock-date'], '%Y-%m-%d')
-    expdate = datetime.datetime.strptime(request.form['expiry-date'], '%Y-%m-%d')
-
-    Item.addItem(itm_name, itm_quantity, stockdate, expdate, itm_type)
-    resp = make_response(redirect(url_for("success_page")))
-    return resp
-
 @app.route("/additem", methods=['GET', 'POST'])
 def additem():
     donation_page = url_for("interface_bp.donation_pg")
@@ -180,10 +159,6 @@ def listitem_test():
 @app.route("/success")
 def success_page():
     return render_template("success.html")
-
-@app.route("/item_search_test")
-def item_search_test():
-    return render_template("item_search_test.html")
 
 @app.route("/search_item", methods=['GET'])
 def search_item():

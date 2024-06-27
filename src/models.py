@@ -5,6 +5,7 @@ from flask import current_app
 from flask_bcrypt import Bcrypt
 import pyotp
 import os
+import server_utils
 
 db = SQLAlchemy()
 bcrypt = Bcrypt()
@@ -40,6 +41,9 @@ class User(UserMixin, db.Model):
     def verify_otp(self, user_otp):
         totp = pyotp.parse_uri(self.get_2fa_url())
         return totp.verify(user_otp)
+    
+    def get_2fa_qr_b64(self):
+        return server_utils.get_qr_base64(self.get_2fa_url())
 
 ## Item model
 class Item(db.Model):

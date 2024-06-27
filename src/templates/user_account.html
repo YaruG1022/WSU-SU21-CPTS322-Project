@@ -25,6 +25,8 @@
                     <li>Name: <span class="editable" id="username">{{ user.name }}</span></li>
                     <li>Email: <span class="editable" id="email">{{ user.email }}</span></li>
                     <li>Account ID: <span id="accountId">{{ user.id }}</span></li>
+
+                    <a href="{{ url_for('login_bp.setup_otp')}}">Set up 2-Factor Authentication</a>
                 {% else %}
                     <li>Name: <span class="editable" id="username">N/A</span></li>
                     <li>Email: <span class="editable" id="email">N/A</span></li>
