@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../static/StyleSheet1.css">
     <link rel="stylesheet" href="../static/homepage_style.css">
     <link rel="stylesheet" href="../static/report_style.css">
+    <link rel="stylesheet" href="../static/inventory_style.css">
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
@@ -44,7 +45,10 @@
 
     <!-- Footer -->
     <div class="footer">
-        <h5>Created by T-Nine</h5>
+        <div class="footer-content">
+            <p>Contact us at: teamnine@gmail.com | Phone: 123-456-7890</p>
+            <p>&copy; 2024 ACME Food Bank Inventory System. All rights reserved.</p>
+        </div>
     </div>
     
     <!-- Modals -->
@@ -52,15 +56,13 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('loginModal');">&times;</span>
             <h2>Login</h2>
-            
+            <div class="warning">
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                <div class="warning">
                     <p>{{ messages[0] }}</p>
-                </div>
                 {% endif %}
                 {% endwith %}
-            
+            </div>
             <form id="loginForm" action="{{ url_for('login_bp.login') }}" method='post'>
                 <label for="email">Email:</label>
                 <input type="text" id="email" name="email"><br><br>
@@ -78,14 +80,13 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('signupModal');">&times;</span>
             <h2>Sign Up</h2>
-            
+            <div class="warning">
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
-                <div class="warning">
                     <p>{{ messages[0] }}</p>
-                </div>
                 {% endif %}
                 {% endwith %}
+            </div>
             <form id="signupForm" action="{{ url_for('login_bp.signup') }}" method='post'>
                 <label for="email">Email:</label>
                 <input type="text" id="email" name="email"><br><br>
