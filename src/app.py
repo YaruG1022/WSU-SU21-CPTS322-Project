@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, url_for, make_response, redirect, jsonify, flash, current_app, g
+from flask import Flask, render_template, request, url_for, make_response, redirect, jsonify, flash, current_app, g
 from markupsafe import escape
 
 import secrets
@@ -10,6 +11,16 @@ from flask_login import LoginManager
 import os
 from login_bp import login_bp, bcrypt
 from interface import interface_bp
+from sqlalchemy import func
+import werkzeug.exceptions
+from werkzeug.utils import secure_filename
+from report_bp import report_bp
+from inventory_bp import inventory_bp
+
+import configparser
+
+from models2 import update_item_statuses
+
 from report_bp import report_bp
 from sqlalchemy import func
 import werkzeug.exceptions
@@ -25,6 +36,13 @@ from models2 import update_item_statuses
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
+app.register_blueprint(report_bp) # register report blueprint
+app.register_blueprint(inventory_bp) # register inventory blueprint
+
+
+config = configparser.ConfigParser()
+config.read('server.ini')
+
 app.register_blueprint(report_bp) # register report blueprint
 app.register_blueprint(inventory_bp) # register inventory blueprint
 
@@ -90,6 +108,12 @@ def before_request():
     if not hasattr(g, 'status_updated'):
         update_item_statuses()
         g.status_updated = True
+# automatically update inventory status at start time.
+@app.before_request
+def before_request():
+    if not hasattr(g, 'status_updated'):
+        update_item_statuses()
+        g.status_updated = True
 
 @app.route("/")
 def index():
@@ -104,9 +128,11 @@ def additem_test():
     itm_name = escape(request.form['name'])
     itm_quantity = escape(request.form['quantity'])
     itm_type = escape(request.form['type'])
+    itm_type = escape(request.form['type'])
     stockdate = datetime.datetime.strptime(request.form['stock-date'], '%Y-%m-%d')
     expdate = datetime.datetime.strptime(request.form['expiry-date'], '%Y-%m-%d')
 
+    Item.addItem(itm_name, itm_quantity, stockdate, expdate, itm_type)
     Item.addItem(itm_name, itm_quantity, stockdate, expdate, itm_type)
     resp = make_response(redirect(url_for("success_page")))
     return resp
@@ -189,6 +215,7 @@ def additem():
 @app.route("/item_list")
 def listitem_test():
     itemlist = Item.getAllItems()
+    itemlist = Item.getAllItems()
     return render_template("itemlist_test.html", itemlist = itemlist)
     pass
 
@@ -217,7 +244,57 @@ def search_item():
     #    result += "(#" + str(itm.id) + "): " + itm.name + " x " + str(itm.quantity) + "<br>" 
     
     return jsonify([item.serialize() for item in item_list])
+@app.route("/item_search_test")
+def item_search_test():
+    return render_template("item_search_test.html")
+
+@app.route("/search_item", methods=['GET'])
+def search_item():
+    query = request.args.get('search')
+    print(query)
+    if(query is None): item_list = Item.query.all()
+    elif(query.isdigit()):
+        item_list = Item.query.filter_by(id = int(query))
+    else:
+        item_list = Item.query.filter(Item.name.ilike("%" + query + "%"))
+    result = ""
+    
+    if(item_list is None):
+        return "No items found."
+    #for itm in item_list:
+    #    result += "(#" + str(itm.id) + "): " + itm.name + " x " + str(itm.quantity) + "<br>" 
+    
+    return jsonify([item.serialize() for item in item_list])
 ###-----------------------###
+
+if __name__ == "__main__":
+    if(config['SSL'].getboolean('SSL_Enabled') == True):
+        # get certificates from server.ini
+        ssl_cert_dir = config['SSL']['Server_Certificate']
+        ssl_key_dir = config['SSL']['Server_Key']
+        if(ssl_cert_dir is None or ssl_key_dir is None):
+            print("NOTICE: No SSL key or certificate set, using dummy certificate.")
+            app.run(ssl_context='adhoc') # use adhoc ssl certificate
+        else:
+            cert_folder = os.path.join(basedir, "certs/")
+            ssl_cert_fulldirectory = os.path.join(cert_folder, ssl_cert_dir)
+            ssl_key_fulldirectory = os.path.join(cert_folder, ssl_key_dir)
+            # check that cert/key files exist 
+            if(os.path.isfile(ssl_cert_fulldirectory) and os.path.isfile(ssl_key_fulldirectory)):
+                print("NOTICE: Using ssl certificate " + ssl_cert_dir + " and key " + ssl_key_dir)
+
+
+                context = (ssl_cert_fulldirectory, ssl_key_fulldirectory)
+                app.run(host='0.0.0.0', port=5000, ssl_context=context)
+            else:
+                print("NOTICE: SSL certificate or key not found. Check that the files are in src/certs/ and named properly in server.ini")
+                print("NOTICE: No SSL key or certificate set, using dummy certificate.")
+                app.run(host='0.0.0.0', port=5000, ssl_context='adhoc')
+    else:
+        # run without SSL
+        print("NOTICE: Running without TLS encryption.")
+        app.run(host='0.0.0.0', port=5000)
+    
 
 if __name__ == "__main__":
     if(config['SSL'].getboolean('SSL_Enabled') == True):
