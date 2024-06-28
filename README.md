@@ -6,7 +6,7 @@ WSU-SU21-CPTS322-Project
 ## Project summary
 
 ### Description of the project
-A web application for efficient inventory management of food and hygiene product donations using Python, Flask, HTML, and SQLite.
+A web application for efficient inventory management of food and hygiene product donations using Python, Flask, HTML, JavaScript and SQLite.
 
 ### Additional information about the project
 The Acme Food Bank Inventory Tracking System is designed to address the challenges faced by food banks in managing frequent and varied donations. This system aims to facilitate real-time updates, provide secure user authentication, and generate detailed reports to enhance operational efficiency. It offers a user-friendly interface for managing inventory, tracking donations, updating stock, and processing recipient orders.
@@ -16,12 +16,11 @@ The Acme Food Bank Inventory Tracking System is designed to address the challeng
 ### Prerequisites
 
 Before you begin, ensure you have the following installed on your machine:
-
-Before you begin, ensure you have the following installed on your machine:
 - Git
 - Python (version 3.8 or higher)
 - SQLite
 - Flask
+- JavaScript
 
 ### Add-ons
 
