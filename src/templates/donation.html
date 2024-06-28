@@ -1,7 +1,7 @@
 ﻿{% extends 'interface_base.html' %}
 {% block content %}
     <script>
-        function getCost() {
+        /*function getCost() {
             var mcost = 0;
             document.getElementById("cost").innerHTML = mcost;
         }
@@ -27,10 +27,9 @@
                         tableBody.appendChild(row);
                     });
                 });
-        }
+        }*/
     </script>
 
-    <!--Notice: action="/action_page.php" sends the form-data to a file named "action_page.php", change "/action_page.php" to the targeted python file.-->
     <form action="{{ url_for('additem') }}" method="post" enctype="multipart/form-data">
         <div class="donation-container">
             <h1>Add donation: </h1>
