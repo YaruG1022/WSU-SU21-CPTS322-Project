@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, url_for, make_response, redirect, jsonify, flash, current_app
+from flask import Flask, render_template, request, url_for, make_response, redirect, jsonify, flash, current_app, g
 from markupsafe import escape
 
 import secrets
@@ -14,13 +14,19 @@ from sqlalchemy import func
 import werkzeug.exceptions
 from werkzeug.utils import secure_filename
 from report_bp import report_bp
+from inventory_bp import inventory_bp
+
 import configparser
-import server_utils
+
+from models2 import update_item_statuses
+
 
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
 app.register_blueprint(report_bp) # register report blueprint
+app.register_blueprint(inventory_bp) # register inventory blueprint
+
 
 config = configparser.ConfigParser()
 config.read('server.ini')
@@ -37,12 +43,11 @@ for dir in required_folders:
     if(os.path.isdir(dir) == False):
         os.makedirs(os.path.join(basedir, dir))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/inventory.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
 # image upload base url
 app.config['IMG_URL'] = "static/img/"
 # max file size
 app.config['MAX_CONTENT_LENGTH'] = 16 * 1000 * 1000
-
 
 # generate secret key if it doesn't exist
 SECRET_FILE_PATH = Path("secret.txt")
@@ -78,6 +83,32 @@ def create_db():
 create_db()
 
 ###-------- Routes --------###
+# automatically update inventory status at start time.
+@app.before_request
+def before_request():
+    if not hasattr(g, 'status_updated'):
+        update_item_statuses()
+        g.status_updated = True
+
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/item_form")
+def additem_test_form():
+    return render_template("additem_form.html")
+
+@app.route("/additem_test", methods=['GET', 'POST'])
+def additem_test():
+    itm_name = escape(request.form['name'])
+    itm_quantity = escape(request.form['quantity'])
+    itm_type = escape(request.form['type'])
+    stockdate = datetime.datetime.strptime(request.form['stock-date'], '%Y-%m-%d')
+    expdate = datetime.datetime.strptime(request.form['expiry-date'], '%Y-%m-%d')
+
+    Item.addItem(itm_name, itm_quantity, stockdate, expdate, itm_type)
+    resp = make_response(redirect(url_for("success_page")))
+    return resp
 
 @app.route("/additem", methods=['GET', 'POST'])
 def additem():
@@ -109,30 +140,37 @@ def additem():
         # no file uploaded, use default
         img_path = os.path.join(app.config['IMG_URL'], 'placeholder.png')
     else: 
-        ## Get image filename
-        if(itm_id == "" or itm_id is None):
-            ## is column empty?
-            if(len(Item.query.all()) != 0):
-                img_name = db.session.query(func.max(Item.id)).scalar() + 1 # new item
-            else:
-                img_name = "1"
-        else:
-            img_name = itm_id # existing item
+        upload_dir = os.path.join(app.config['IMG_URL'], "items/")
+        IMAGE_EXTENSIONS = { 'png', 'jpg', 'jpeg', 'gif', 'webp', 'jfif'}
         
-        upload_success = server_utils.upload_image(request.files['item-image'], "profiles", img_name)
-
-        if(upload_success[0] == False):
-            flash(upload_success[1])
+        # get highest ID and add 1
+        new_id = db.session.query(func.max(Item.id)).scalar() + 1
+        
+        file = request.files['item-image'] # get file
+        if file.filename == '': # check if not empty filename
+            flash("Empty file name")
             return redirect(donation_page)
+        if '.' in file.filename:
+            file_extension = file.filename.rsplit('.', 1)[1].lower()
+            filename = secure_filename(str(new_id) + "." + file_extension)
+            if(file_extension in IMAGE_EXTENSIONS):
+                try:
+                    # save file to directory
+                    path = os.path.join(upload_dir, filename)
+                    file.save(path)
+                    img_path = path
+                except werkzeug.exceptions.RequestEntityTooLarge:
+                    # Uploaded file broke file size limit
+                    flash("Uploaded file too large, max file size is " + current_app.config['MAX_CONTENT_LENGTH'] / (1000000) + " MB")
+                    return redirect(donation_page)
+            else:
+                # invalid extension
+                flash("Invalid file type. Uploaded image must be a PNG, JPEG, GIF, WEBP, or JFIF.")
+                return redirect(donation_page)
 
-        else:
-            img_path = upload_success[1]
-
-    ## New item
     if(itm_id == "" or itm_id is None):
         print(img_path)
         Item.addItem(itm_name, itm_quantity, stockdate, expdate, itm_type, img_path)
-    # Updating item
     elif(itm_type is None):
         itm = Item.query.filter_by(id = itm_id).first()
         itm.quantity += int(itm_quantity)
@@ -140,7 +178,6 @@ def additem():
         itm.expdate = expdate
         itm.image = img_path
         db.session.commit()
-    #error
     else:
         flash("Select a valid item type if creating a new item.")
         return redirect(donation_page)
@@ -157,6 +194,10 @@ def listitem_test():
 @app.route("/success")
 def success_page():
     return render_template("success.html")
+
+@app.route("/item_search_test")
+def item_search_test():
+    return render_template("item_search_test.html")
 
 @app.route("/search_item", methods=['GET'])
 def search_item():
