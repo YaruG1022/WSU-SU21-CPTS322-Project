@@ -24,6 +24,7 @@
                 { name: 'Inventory', path: "{{ url_for('interface_bp.inventory_pg') }}" },
                 { name: 'Donation', path: "{{ url_for('interface_bp.donation_pg') }}" },
                 { name: 'Orders', path: "{{ url_for('interface_bp.orders_pg') }}" },
+                { name: 'Create Order', path: "{{ url_for('interface_bp.add_order_pg') }}" },
                 {% if current_user.is_authenticated %}
                     { name: '{{ current_user.name }}', path: '{{ url_for('interface_bp.account_pg') }}', style: 'float: right; padding: 14px 16px;', id: 'userBtn', img: '{{ current_user.pfp_url }}'},
                     { name: 'Log out', path: '{{ url_for('login_bp.log_out') }}', style: 'float: right; padding: 14px 16px;', icon: 'fa fa-sign-out', id: 'logOutBtn'}
