@@ -20,13 +20,11 @@ import configparser
 
 from models2 import update_item_statuses
 
-
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
 app.register_blueprint(report_bp) # register report blueprint
 app.register_blueprint(inventory_bp) # register inventory blueprint
-
 
 config = configparser.ConfigParser()
 config.read('server.ini')
@@ -86,9 +84,10 @@ create_db()
 # automatically update inventory status at start time.
 @app.before_request
 def before_request():
-    if not hasattr(g, 'status_updated'):
-        update_item_statuses()
-        g.status_updated = True
+    #if not hasattr(g, 'status_updated'):
+    #    update_item_statuses()
+    #    g.status_updated = True
+    pass
 
 @app.route("/")
 def index():
@@ -98,17 +97,6 @@ def index():
 def additem_test_form():
     return render_template("additem_form.html")
 
-@app.route("/additem_test", methods=['GET', 'POST'])
-def additem_test():
-    itm_name = escape(request.form['name'])
-    itm_quantity = escape(request.form['quantity'])
-    itm_type = escape(request.form['type'])
-    stockdate = datetime.datetime.strptime(request.form['stock-date'], '%Y-%m-%d')
-    expdate = datetime.datetime.strptime(request.form['expiry-date'], '%Y-%m-%d')
-
-    Item.addItem(itm_name, itm_quantity, stockdate, expdate, itm_type)
-    resp = make_response(redirect(url_for("success_page")))
-    return resp
 @app.route("/neworder", methods=['GET', 'POST'])
 def neworder():
     order_page = url_for("interface_bp.add_order_pg")
@@ -119,7 +107,7 @@ def neworder():
     recipient_name = request.form['recipient-name']
 
     # reduce item quantities
-    
+
     entries = order_items.split(',') # split into comma separated values ("1x5", "15x3", etc)
     print("Entries: " + str(entries))
     items = []
@@ -137,15 +125,12 @@ def neworder():
             return redirect(order_page)
         else:
             item.quantity = newquantity
-            
+
     Order.addOrder(order_date, None, "Confirmed", order_items, recipient_name, recipient_address)
     db.session.commit()
 
     flash("Order successful!")
     return redirect(order_page)
-
-
-
 
 @app.route("/additem", methods=['GET', 'POST'])
 def additem():
@@ -225,6 +210,7 @@ def additem():
 @app.route("/item_list")
 def listitem_test():
     itemlist = Item.getAllItems()
+    itemlist = Item.getAllItems()
     return render_template("itemlist_test.html", itemlist = itemlist)
     pass
 
@@ -232,9 +218,6 @@ def listitem_test():
 def success_page():
     return render_template("success.html")
 
-@app.route("/item_search_test")
-def item_search_test():
-    return render_template("item_search_test.html")
 
 @app.route("/search_item", methods=['GET'])
 def search_item():
@@ -282,4 +265,3 @@ if __name__ == "__main__":
         # run without SSL
         print("NOTICE: Running without TLS encryption.")
         app.run(host='0.0.0.0', port=5000)
-    
