@@ -7,6 +7,7 @@ body {
     margin: 0;
     position: relative;
     height: 100vh;
+    background-color: white;
 }
 
 .header {
@@ -251,36 +252,6 @@ tr:hover {
     height: 24px;
 }
 
-
-.inventory-buttons {
-    width: 90%;
-    border-collapse: collapse;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: 20px;
-    margin-bottom: 20px;
-    font: Arial;
-
-}
-.inventory-buttons button {
-    background-color: #ddd;
-    border: 1px solid gray;
-    color: black;
-    padding: 10px 20px;
-    margin-right: 2px;
-    margin-left: 2px;
-    cursor: pointer;
-    font-size: 16px;
-    border-radius: 4px;
-}
-.inventory-buttons button.disabled {
-    background-color: #ddd;
-    cursor: not-allowed;
-}
-.inventory-buttons button img {
-    vertical-align: middle;
-    margin-right: 5px;
-}
 
 
 
@@ -646,12 +617,3 @@ tr:hover {
     background-color: #f5f5f5;
 }
 
-.warning {
-    background-color: #ffa3a3;
-    border: 1px solid red;
-    border-radius: 5px;
-    padding: 4px;
-    max-width: fit-content;
-    color: black;
-    margin: 5px auto;
-}

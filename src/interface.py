@@ -23,6 +23,11 @@ def inventory_pg():
 
     return render_template("inventory.html", title="Inventory", items = item_list)
 
+# @interface_bp.route('/inventory')
+# @login_required
+# def inventory_pg():
+#     return render_template("inventory.html", title="Inventory")
+
 @interface_bp.route('/report')
 @login_required
 def report_pg():
