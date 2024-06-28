@@ -80,6 +80,43 @@ def create_db():
 create_db()
 
 ###-------- Routes --------###
+@app.route("/neworder", methods=['GET', 'POST'])
+def neworder():
+    order_page = url_for("interface_bp.add_order_pg")
+
+    order_items = request.form['itemdata']
+    order_date = datetime.datetime.strptime((request.form['order-date']), '%Y-%m-%d')
+    recipient_address = request.form['recipient-address']
+    recipient_name = request.form['recipient-name']
+
+    # reduce item quantities
+    
+    entries = order_items.split(',') # split into comma separated values ("1x5", "15x3", etc)
+    print("Entries: " + str(entries))
+    items = []
+    increment = 0
+    for entry in entries:
+        data = entry.split('x') # split entry ("1x5" to [1,5])
+        print(data)
+        itm_id = int(data[0])
+        itm_quantity = int(data[1])
+        item = Item.getItemByID(int(itm_id))
+        oldquantity = item.quantity
+        newquantity = oldquantity - itm_quantity
+        if newquantity < 0:
+            flash("Error: Invalid quantity for '" + item.name + "' (Available: " + oldquantity + ")" )
+            return redirect(order_page)
+        else:
+            item.quantity = newquantity
+            
+    Order.addOrder(order_date, None, "Confirmed", order_items, recipient_name, recipient_address)
+    db.session.commit()
+
+    flash("Order successful!")
+    return redirect(order_page)
+
+
+
 
 @app.route("/additem", methods=['GET', 'POST'])
 def additem():

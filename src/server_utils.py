@@ -60,3 +60,5 @@ def validate_image(data):
     if not format:
         return False # data isn't a valid image file
     return True # data is a valid image file
+
+

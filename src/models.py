@@ -81,48 +81,92 @@ class Item(db.Model):
 
     def getItemByID(item_id):
         return Item.query.filter_by(id = item_id).first()
-        #return Item.query.all()
     
     def deleteItemByID(item_id):
-        if(Item.getItemByID(id) is None):
+        itm = Item.getItemByID(id)
+        if(itm is None):
+            print("Item  " + str(item_id) + " Not found!")
             return False
         else:
-            Item.query.filter(id = item_id).delete()
+            itm.delete()
             db.session.commit()
             return True
-
-    def setItemQuantity(item_id, quantity):
-        if(Item.getItemByID(id) is None):
-            print("Item " + str(id) + " not found!")
-            return False
-        else:
-            update_item = Item.query.filter_by(id = item_id).first()
-            update_item.quantity = quantity
-            db.session.commit()
-            return True
-
-    def editItem(item_id, new_name = None, 
-                 new_quantity = None,
-                 new_stockdate = None, new_expdate = None):
-        if(Item.getItemByID(id) is None):
-            print("Item " + str(id) + " not found!")
-            return False
-        else:
-            update_item = Item.query.filter_by(id = item_id).first()
-            # update all parameters
-            if(new_name is not None): update_item.name = new_name
-            if(new_quantity is not None): update_item.quantity = new_quantity
-            if(new_stockdate is not None): update_item.stockdate = new_stockdate
-            if(new_expdate is not None): update_item.expdate = new_expdate
-            db.session.commit()
-            return True   
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True) # order id, automatically increments
     orderdate = db.Column(db.Date, nullable = False)
     deliverydate = db.Column(db.Date, nullable = True) # can be empty until delivery
     status = db.Column(db.String(255), nullable = False)
-    items = db.Column(db.String(255), nullable = False) # stored as comma separated item IDs
+    items = db.Column(db.String(255), nullable = False) # stored as comma separated item IDs with quantities in every element
+                                                        # e.g.: "35x20, 60x14, 59x18"
     recipient_name = db.Column(db.String(255), nullable = False)
     recipient_address = db.Column(db.String(255), nullable = False)
 
+    def serialize(self):
+        return { 
+            'id': self.id,
+            'orderdate': self.orderdate,
+            'deliverydate': self.deliverydate,
+            'status': self.status,
+            'items': self.items,
+            'recipient_name': self.recipient_name,
+            'recipient_address': self.recipient_address
+        }
+    
+    def getAllOrders():
+        return Order.query.all()
+
+    def addOrder(o_orderdate, o_deliverydate, o_status, o_items, o_recipient_name, o_recipient_address):
+        new_order = Order(orderdate = o_orderdate, deliverydate = o_deliverydate, status = o_status, items = o_items, recipient_name = o_recipient_name, recipient_address = o_recipient_address)
+        db.session.add(new_order)
+        db.session.commit()
+
+    def getOrderByID(self, order_id):
+        return self.query.filter_by(id = order_id).first()
+
+    def changeStatus(self, order_id, new_status):
+        order = self.getOrderByID(order_id)
+
+        if(order is None):
+            print("Order  " + str(order_id) + " Not found!")
+            return False
+        else:
+            order.status = new_status
+            db.session.commit()
+            return True
+    
+    def deleteOrderByID(self, order_id):
+        order = self.getOrderByID(order_id)
+        if(order is None):
+            print("Order  " + str(order_id) + " Not found!")
+            return False
+        else:
+            order.delete()
+            db.session.commit()
+            return True
+    
+    # get item info from the IDs stored in the order items field
+    def getOrderItems(self, order_id):
+        order = self.getOrderByID(order_id)
+        if(order is None):
+            print("Order  " + str(order_id) + " Not found!")
+            return None
+        else:
+            return itemstring_toitems(order.items) # return list of items
+
+
+def itemstring_toitems(data):
+    entries = data.split(',') # split into comma separated values ("1x5", "15x3", etc)
+    print("Entries: " + str(entries))
+    items = []
+    increment = 0
+    for entry in entries:
+        data = entry.split('x') # split entry ("1x5" to [1,5])
+        print(data)
+        itm_id = int(data[0])
+        itm_quantity = int(data[1])
+        item = Item.getItemByID(int(itm_id))
+        items.append((item.name, itm_quantity)) # add to dictionary
+
+    print(items)
+    return items # return list of items
