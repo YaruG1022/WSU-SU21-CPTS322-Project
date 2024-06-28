@@ -5,7 +5,7 @@ import io
 import logging
 
 # Create a Blueprint for the report
-report_bp = Blueprint('report_bp', __name__, template_folder='templates')
+report_bp = Blueprint('report_bp', __name__)
 
 # Configure logging
 logging.basicConfig(level=logging.DEBUG)
