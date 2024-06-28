@@ -30,12 +30,12 @@ Here are links to the issues that we completed in this sprint:
  * [Implement report generating system](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/15)
  * [Implement inventory management system](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/16)
  
- ## Incomplete Issues/User Stories
- Here are links to issues we worked on but did not complete in this sprint:
- We set this issue as the final task to be completed at the end of the project
- * [TODO: Implement Frontend and Backend Systems](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/3) <<We designated this issue as the final task to be completed at the end of the project, completing this issue means that our project is completed.>>
- * [Overall User Interface Improvement](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/7) <<We think this issue has lower priority comparing to the major-functionality-related issues so we postponed this issue to the next sprint.>>
- * [Improve the usability, conveniency and efficiency of the application of our inventory management system](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/17) <<We set this issue as the goal of the next sprint.>>
+## Incomplete Issues/User Stories
+Here are links to issues we worked on but did not complete in this sprint:
+
+ * [TODO: Implement Frontend and Backend Systems](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/3) - We designated this issue as the final task to be completed at the end of the project. Completing this issue signifies the overall completion of our project.
+ * [Overall User Interface Improvement](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/7) - We believe this issue has a lower priority compared to the major functionality-related issues, so we postponed it to the next sprint.
+ * [Improve the Usability, Convenience, and Efficiency of the Inventory Management System](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/17) - We set this issue as a primary goal for the next sprint.
 
 ## Code Files for Review
 Please review the following code files, which were actively developed during this sprint, for quality:
