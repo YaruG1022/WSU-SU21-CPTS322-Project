@@ -1,4 +1,5 @@
 # Sprint 2 Report (6/01/24 - 6/28/2024)
+[Demo video 1](https://youtu.be/RB46SoaQTOI)
 
 ## What's New (User Facing)
  * Added a Report Generating System: Users can now export inventory, donation, and order data as a CSV or XLSX file. It also allows users to view the inventory, donation, and order data tables by selecting and sorting by name, quantity, category, date, or status.
@@ -6,6 +7,7 @@
  * Added a Donation Management System: Users can add donations to the database with details such as name, date, quantity, and image. Users can also search existing items by name or ID.
  * Added a Log-In and Sign-Up System: This system features login and signup modals. Users need to sign up if they don't have an account and log in to use other features of the website. It also includes a "remember me" feature to store user information.
  * Added a User Center: Once logged in, users can access this page. On this page, users can edit their information, including avatar, name, email, and ID.
+ * Added an Order Management system: Users can create and view orders of items, which also affect the quantity of items in the inventory.
  * Implemented Transport Layer Security (TLS) Encryption: Passwords are now stored as encrypted code in the application's database file.
  * Implemented Two-Factor Authentication (2FA): Users can set up 2FA in the user center. Once it is set up, users will need to verify their identity via QR code at login time.
  * Improved UI Design: Enhanced the visual design of all pages, adding features such as a slideshow and a clickable menu on the homepage for a better visual experience.
@@ -17,7 +19,7 @@ During this sprint, I developed a complete static HTML template, including the f
 My team member developed the basic framework of our application, as well as the backend system for the user center. He also added the login and sign-up system, TLS encryption, and 2FA system. Additionally, he developed a donation management system and the basic features of the inventory management system.
 
 ## Unfinished Work
-In this sprint, we were unable to fully complete the overall improvements to the user interface and the design of some pages, such as the stylesheet for the donation management page. The stylesheet for this page needs to be redone to match the new updates made by my team member. Additionally, several interactive features, including the homepage slideshow, were not finished due to time constraints. These features, along with other planned enhancements, were given lower priority compared to major functionalities. These improvements are set as goals for our next sprint. It is also likely that the recipient order backend system will remain unfinished due to time constraints.
+In this sprint, we were unable to fully complete the overall improvements to the user interface and the design of some pages, such as the stylesheet for the donation management page. The stylesheet for this page needs to be redone to match the new updates made by my team member. Additionally, several interactive features, including the homepage slideshow, were not finished due to time constraints. These features, along with other planned enhancements, were given lower priority compared to major functionalities. These improvements are set as goals for our next sprint.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
