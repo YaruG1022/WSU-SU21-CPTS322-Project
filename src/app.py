@@ -18,13 +18,13 @@ from inventory_bp import inventory_bp
 
 import configparser
 
-from models2 import update_item_statuses
+#from models2 import update_item_statuses
 
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
-app.register_blueprint(report_bp) # register report blueprint
-app.register_blueprint(inventory_bp) # register inventory blueprint
+#app.register_blueprint(report_bp) # register report blueprint
+#app.register_blueprint(inventory_bp) # register inventory blueprint
 
 config = configparser.ConfigParser()
 config.read('server.ini')
