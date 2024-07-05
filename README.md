@@ -19,6 +19,7 @@ Before you begin, ensure you have the following installed on your machine:
 - Git
 - Python (version 3.8 or higher)
 - SQLite
+- SQLAlchemy
 
 ### Installation Steps
 
