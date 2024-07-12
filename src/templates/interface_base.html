@@ -81,13 +81,13 @@
         <div class="modal-content">
             <span class="close" onclick="closeModal('signupModal');">&times;</span>
             <h2>Sign Up</h2>
-            <div class="warning">
                 {% with messages = get_flashed_messages() %}
                 {% if messages %}
+                <div class="warning"></div>
                     <p>{{ messages[0] }}</p>
+                </div>
                 {% endif %}
                 {% endwith %}
-            </div>
             <form id="signupForm" action="{{ url_for('login_bp.signup') }}" method='post'>
                 <label for="email">Email:</label>
                 <input type="text" id="email" name="email"><br><br>
