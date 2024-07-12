@@ -1,21 +1,8 @@
 from flask import Blueprint, request, render_template, jsonify, Blueprint, make_response
-from models2 import add_item, update_item, delete_items, get_db_connection, update_item_statuses
 import sqlite3
-
+from models import db, Item, User
 
 inventory_bp = Blueprint('inventory_bp', __name__, template_folder='templates')
-
-# Function to establish a connection to the database
-def get_db_connection():
-    # Connect to the single database file 'inventory.db'
-    conn = sqlite3.connect('data/inventory.db')
-    conn.row_factory = sqlite3.Row
-    return conn
-    
-# Existing route for inventory page
-@inventory_bp.route('/inventory')
-def inventory_pg():
-    return render_template('inventory.html')
 
 # Route to get inventory data
 # @inventory_bp.route('/getInventoryData', methods=['GET'])
@@ -30,19 +17,12 @@ def inventory_pg():
 #     columns = ['id', 'name', 'quantity', 'category', 'date_added', 'usable_until', 'status']
     
 #     return jsonify({'columns': columns, 'data': data})
+
 @inventory_bp.route('/getInventoryData', methods=['GET'])
 def get_inventory_data():
-    update_item_statuses()
-    conn = get_db_connection()
-    cursor = conn.execute('SELECT * FROM inventory')
-    rows = cursor.fetchall()
-    conn.close()
+    rows = Item.query.all()
 
-    # Convert rows to a list of dictionaries
-    data = [dict(row) for row in rows]
-    columns = ['id', 'name', 'quantity', 'category', 'date_added', 'usable_until', 'status']
-
-    return jsonify({'columns': columns, 'data': data})
+    return jsonify([item.serialize() for item in rows])
 
 # Route to add item
 @inventory_bp.route('/addItem', methods=['POST'])
@@ -50,7 +30,7 @@ def add_item_route():
     data = request.get_json()
     print(f"Received data: {data}")
     try:
-        add_item(data['name'], data['quantity'], data['category'], data['date_added'], data['usable_until'], data['status'])
+        Item.addItem(data['name'], data['quantity'], data['date_added'], data['usable_until'], data['category'])
         return jsonify({'status': 'success'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
@@ -60,7 +40,7 @@ def update_item_route():
     data = request.get_json()
     print(f"Updating item: {data}")
     try:
-        update_item(data['id'], data['name'], data['quantity'], data['category'], data['date_added'], data['usable_until'], data['status'])
+        Item.update_item(data['id'], data['name'], data['quantity'], data['category'], data['date_added'], data['usable_until'])
         return jsonify({'status': 'success'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
@@ -72,7 +52,8 @@ def delete_item_route():
     ids = data.get('ids', [])
     print(f"Deleting items with ids: {ids}")
     try:
-        delete_items(ids)
+        for id in ids:
+            Item.deleteItemByID(id)
         return jsonify({'status': 'success'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})

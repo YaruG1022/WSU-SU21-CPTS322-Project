@@ -76,6 +76,17 @@ class Item(db.Model):
 
         db.session.commit()
 
+    def updateItem(item_id, item_name = None, item_quantity = None, item_stockdate = None, item_expdate = None, item_type = None, item_img = None):
+        foundItem = Item.query.filter_by(id = item_id).first()
+        if(item_name): foundItem.name = item_name
+        if(item_quantity): foundItem.quantity = item_quantity
+        if(item_stockdate): foundItem.stockdate = item_stockdate
+        if(item_expdate): foundItem.expdate = item_expdate
+        if(item_type): foundItem.type = item_type
+        if(item_img): foundItem.image = item_img
+        db.session.commit()
+
+
     def getAllItems():
         return Item.query.all()
 

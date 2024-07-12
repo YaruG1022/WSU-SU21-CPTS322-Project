@@ -18,8 +18,6 @@ from inventory_bp import inventory_bp
 
 import configparser
 
-from models2 import update_item_statuses
-
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
@@ -41,7 +39,7 @@ for dir in required_folders:
     if(os.path.isdir(dir) == False):
         os.makedirs(os.path.join(basedir, dir))
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/test.db")
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, "data/inventory.db")
 # image upload base url
 app.config['IMG_URL'] = "static/img/"
 # max file size
@@ -81,13 +79,6 @@ def create_db():
 create_db()
 
 ###-------- Routes --------###
-# automatically update inventory status at start time.
-@app.before_request
-def before_request():
-    #if not hasattr(g, 'status_updated'):
-    #    update_item_statuses()
-    #    g.status_updated = True
-    pass
 
 @app.route("/")
 def index():
@@ -209,7 +200,6 @@ def additem():
 
 @app.route("/item_list")
 def listitem_test():
-    itemlist = Item.getAllItems()
     itemlist = Item.getAllItems()
     return render_template("itemlist_test.html", itemlist = itemlist)
     pass
