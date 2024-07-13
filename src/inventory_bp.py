@@ -1,6 +1,8 @@
-from flask import Blueprint, request, render_template, jsonify, Blueprint, make_response
+from flask import Blueprint, request, render_template, jsonify, Blueprint, make_response, current_app
 import sqlite3
 from models import db, Item, User
+import os
+from datetime import datetime
 
 inventory_bp = Blueprint('inventory_bp', __name__, template_folder='templates')
 
@@ -30,7 +32,7 @@ def add_item_route():
     data = request.get_json()
     print(f"Received data: {data}")
     try:
-        Item.addItem(data['name'], data['quantity'], data['date_added'], data['usable_until'], data['category'])
+        Item.addItem(data['name'], data['quantity'], datetime.strptime(data['date_added'], "%Y-%m-%d"), datetime.strptime(data['usable_until'], "%Y-%m-%d"), data['category'], os.path.join(current_app.config['IMG_URL'], 'placeholder.png'))
         return jsonify({'status': 'success'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
@@ -40,7 +42,7 @@ def update_item_route():
     data = request.get_json()
     print(f"Updating item: {data}")
     try:
-        Item.update_item(data['id'], data['name'], data['quantity'], data['category'], data['date_added'], data['usable_until'])
+        Item.update_item(data['id'], data['name'], data['quantity'], data['category'],  datetime.strptime(data['date_added'], "%Y-%m-%d"), datetime.strptime(data['usable_until'], "%Y-%m-%d"))
         return jsonify({'status': 'success'})
     except Exception as e:
         return jsonify({'status': 'error', 'message': str(e)})
@@ -53,7 +55,9 @@ def delete_item_route():
     print(f"Deleting items with ids: {ids}")
     try:
         for id in ids:
-            Item.deleteItemByID(id)
+            print("Deleting item " + id)
+            Item.deleteItemByID(int(id))
         return jsonify({'status': 'success'})
     except Exception as e:
+        print(str(e))
         return jsonify({'status': 'error', 'message': str(e)})

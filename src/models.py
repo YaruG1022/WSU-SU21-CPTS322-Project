@@ -94,13 +94,14 @@ class Item(db.Model):
         return Item.query.filter_by(id = item_id).first()
     
     def deleteItemByID(item_id):
-        itm = Item.getItemByID(id)
+        itm = Item.query.filter_by(id = item_id).first()
         if(itm is None):
             print("Item  " + str(item_id) + " Not found!")
             return False
         else:
-            itm.delete()
+            db.session.delete(itm)
             db.session.commit()
+            print("deleted item with ID: " + str(item_id) + "!")
             return True
 
 class Order(db.Model):
