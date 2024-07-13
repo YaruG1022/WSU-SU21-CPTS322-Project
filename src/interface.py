@@ -45,9 +45,11 @@ def report_pg():
 def orders_pg():
     orders_list = Order.getAllOrders()
     itemlists = {}
-    for order in orders_list: # populate dictionary
-        itemlists[order.id] = order.getOrderItems(order.id)
-    
+    if(orders_list):
+        for order in orders_list: # populate dictionary
+            itemlists[order.id] = order.getOrderItems(order.id)
+    else:
+        orders_list = {}
     return render_template("orders.html", title="Orders", orders = orders_list, itemlists = itemlists)
 
 @interface_bp.route('/account')

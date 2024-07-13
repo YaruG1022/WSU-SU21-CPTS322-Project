@@ -3,6 +3,7 @@ import sqlite3
 import pandas as pd
 import io
 import logging
+from models import *
 
 # Create a Blueprint for the report
 report_bp = Blueprint('report_bp', __name__)
@@ -26,7 +27,9 @@ def get_db_connection():
 # Route to render the report page
 @report_bp.route('/report')
 def report_pg():
+    logger.info("HI HELLO WHATS UP")
     return render_template('report.html')
+    
 
 # Route to fetch report data based on report type
 @report_bp.route('/getReportData')
@@ -36,9 +39,8 @@ def get_report_data():
     
     # Map the report type to the corresponding table name
     table_map = {
-        'inventory': 'inventory',
-        'donation': 'donation',
-        'recipient order': 'recipient_order'
+        'inventory': Item,
+        'shipments': Order
     }
 
     # Get the table name based on the report type
@@ -50,30 +52,34 @@ def get_report_data():
 
     conn = get_db_connection()
     
+    
+
     if conn is None:
         # If the database connection fails, return an error response
         return jsonify({'error': 'Database connection failed'}), 500
 
     try:
         # Fetch column names
-        cursor = conn.cursor()
-        cursor.execute(f'PRAGMA table_info({table_name})')
-        columns = [col[1] for col in cursor.fetchall()]
-
+        keys = []
+        if table_name == 'item':
+            keys = table_name.query.all().keys()
+        elif table_name == "order":
+            keys = table_name.query.all().keys()
+        
         # Query to select all data from the specified table
         query = f'SELECT * FROM {table_name}'
-        data = cursor.execute(query).fetchall()
-        conn.close()
+        data = table_name.query.all()
 
         # Convert the data to a list of dictionaries
         result = {
-            'columns': columns,
+            'columns': keys,
             'data': [dict(row) for row in data]
         }
         return jsonify(result)
     except Exception as e:
         # Log any errors that occur during data fetching
         logger.error(f"Error fetching data: {e}")
+        print(f"Error fetching data: {e}")
         return jsonify({'error': 'Failed to fetch data'}), 500
     
 # Route to generate and download the report
@@ -86,9 +92,8 @@ def generate_report():
     
     # Map the report type to the corresponding table name
     table_map = {
-        'inventory': 'inventory',
-        'donation': 'donation',
-        'recipient order': 'recipient_order'
+        'inventory': Item,
+        'recipient order': Order
     }
 
     # Get the table name based on the report type
@@ -98,17 +103,10 @@ def generate_report():
         # If the report type is invalid, return an error response
         return jsonify({'error': 'Invalid report type'}), 400
 
-    conn = get_db_connection()
-    
-    if conn is None:
-        # If the database connection fails, return an error response
-        return jsonify({'error': 'Database connection failed'}), 500
-
     try:
         # Query to select all data from the specified table
-        query = f'SELECT * FROM {table_name}'
-        data = conn.execute(query).fetchall()
-        conn.close()
+        data = table_name.query.all()
+
 
         # Convert the data to a list of dictionaries
         report_data = [dict(row) for row in data]
@@ -137,4 +135,5 @@ def generate_report():
     except Exception as e:
         # Log any errors that occur during report generation
         logger.error(f"Error generating report: {e}")
+        
         return jsonify({'error': 'Failed to generate report'}), 500

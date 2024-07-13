@@ -178,7 +178,8 @@ def itemstring_toitems(data):
         itm_id = int(data[0])
         itm_quantity = int(data[1])
         item = Item.getItemByID(int(itm_id))
-        items.append((item.name, itm_quantity)) # add to dictionary
+        if(item):
+            items.append((item.name, itm_quantity)) # add to dictionary
 
     print(items)
     return items # return list of items
