@@ -76,6 +76,17 @@ class Item(db.Model):
 
         db.session.commit()
 
+    def updateItem(item_id, item_name = None, item_quantity = None, item_stockdate = None, item_expdate = None, item_type = None, item_img = None):
+        foundItem = Item.query.filter_by(id = item_id).first()
+        if(item_name): foundItem.name = item_name
+        if(item_quantity): foundItem.quantity = item_quantity
+        if(item_stockdate): foundItem.stockdate = item_stockdate
+        if(item_expdate): foundItem.expdate = item_expdate
+        if(item_type): foundItem.type = item_type
+        if(item_img): foundItem.image = item_img
+        db.session.commit()
+
+
     def getAllItems():
         return Item.query.all()
 
@@ -83,13 +94,14 @@ class Item(db.Model):
         return Item.query.filter_by(id = item_id).first()
     
     def deleteItemByID(item_id):
-        itm = Item.getItemByID(id)
+        itm = Item.query.filter_by(id = item_id).first()
         if(itm is None):
             print("Item  " + str(item_id) + " Not found!")
             return False
         else:
-            itm.delete()
+            db.session.delete(itm)
             db.session.commit()
+            print("deleted item with ID: " + str(item_id) + "!")
             return True
 
 class Order(db.Model):
@@ -166,7 +178,8 @@ def itemstring_toitems(data):
         itm_id = int(data[0])
         itm_quantity = int(data[1])
         item = Item.getItemByID(int(itm_id))
-        items.append((item.name, itm_quantity)) # add to dictionary
+        if(item):
+            items.append((item.name, itm_quantity)) # add to dictionary
 
     print(items)
     return items # return list of items

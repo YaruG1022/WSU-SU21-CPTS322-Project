@@ -12,7 +12,7 @@
  * Implemented Transport Layer Security (TLS) Encryption: Passwords are now stored as encrypted code in the application's database file.
  * Implemented Two-Factor Authentication (2FA): Users can set up 2FA in the user center. Once it is set up, users will need to verify their identity via QR code at login time.
  * Improved UI Design: Enhanced the visual design of all pages, adding features such as a slideshow and a clickable menu on the homepage for a better visual experience.
- 
+ * Added an Order Management system: Users can create and view orders of items, which also affect the quantity of items in the inventory.
 
 ## Work Summary (Developer Facing)
 During this sprint, I developed a complete static HTML template, including the frontend of login modal, user center, and other related pages. I also created the backend for a report generating system and an inventory management system. Additionally, I added various interactive features to the templates and made overall UI improvements, enhancing the visual design and usability of the HTML pages.

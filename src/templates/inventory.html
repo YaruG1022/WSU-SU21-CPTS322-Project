@@ -94,18 +94,20 @@
             fetch(`/getInventoryData`)
             .then(response => response.json())
             .then(data => {
+                console.log(Object.keys(data[0]));
                 const tableHead = document.getElementById('inventoryTable').getElementsByTagName('thead')[0];
                 const tableBody = document.getElementById('inventoryTable').getElementsByTagName('tbody')[0];
 
                 // Clear existing headers and rows
-                tableHead.innerHTML = '';
                 tableBody.innerHTML = '';
 
                 // Create table headers
+                // This can simply be hardcoded, and in the correct order.
+                /*
                 const headerRow = document.createElement('tr');
                 const checkboxTh = document.createElement('th');
                 headerRow.appendChild(checkboxTh);
-                data.columns.forEach((col, index) => {
+                Object.keys(data[0]).forEach((col, index) => {
                     const th = document.createElement('th');
                     th.textContent = col;
                     th.classList.add('sortable');
@@ -114,9 +116,9 @@
                     headerRow.appendChild(th);
                 });
                 tableHead.appendChild(headerRow);
-
+                */
                 // Create table rows
-                data.data.forEach(row => {
+                data.forEach(row => {
                     const tr = document.createElement('tr');
                     tr.dataset.id = row.id; // Add data-id attribute for each row
                     const checkboxTd = document.createElement('td');
@@ -125,15 +127,26 @@
                     checkbox.classList.add('select-checkbox');
                     checkboxTd.appendChild(checkbox);
                     tr.appendChild(checkboxTd);
-
-                    data.columns.forEach((col, index) => {
+                    console.log(row['id']);
+                    rowdata = [row['id'], row['image'], row['name'], row['type'], row['quantity'], row['stockdate'], row['expdate']];
+                    rowdata.forEach(datapoint => {
+                        
+                        new_td = document.createElement('td');
+                        if(datapoint == row['image']){
+                            new_td.innerHTML = "<img src='" + row['image'] + "' alt='Icon' class='icon'>"
+                        }else{
+                            new_td.innerHTML = datapoint;
+                        }
+                        
+                        tr.appendChild(new_td);
+                    })
+                    /*
+                    data.forEach((col, index) => {
                         const td = document.createElement('td');
                         td.textContent = row[col];
-                        if (col === 'status') {
-                            td.classList.add('status-cell');
-                        }
                         tr.appendChild(td);
                     });
+                    */
                     tableBody.appendChild(tr);
                 });
             })
@@ -325,9 +338,5 @@
                 event.target.parentNode.classList.add('selected');
             });
         });
-
-        // Call fetchInventoryData on page load
-        document.addEventListener('DOMContentLoaded', fetchInventoryData);
-
     </script>
 {% endblock %}

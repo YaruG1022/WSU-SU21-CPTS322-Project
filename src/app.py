@@ -18,7 +18,6 @@ from inventory_bp import inventory_bp
 
 import configparser
 
-#from models2 import update_item_statuses
 
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
@@ -81,13 +80,6 @@ def create_db():
 create_db()
 
 ###-------- Routes --------###
-# automatically update inventory status at start time.
-@app.before_request
-def before_request():
-    #if not hasattr(g, 'status_updated'):
-    #    update_item_statuses()
-    #    g.status_updated = True
-    pass
 
 @app.route("/")
 def index():
@@ -203,7 +195,6 @@ def additem():
 
 @app.route("/item_list")
 def listitem_test():
-    itemlist = Item.getAllItems()
     itemlist = Item.getAllItems()
     return render_template("itemlist_test.html", itemlist = itemlist)
     pass
