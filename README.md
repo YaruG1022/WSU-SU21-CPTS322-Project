@@ -19,15 +19,7 @@ Before you begin, ensure you have the following installed on your machine:
 - Git
 - Python (version 3.8 or higher)
 - SQLite
-- Flask
-- JavaScript
-
-### Add-ons
-
-The project includes the following add-ons:
-- **Flask**: For building the web application.
-- **SQLite**: For the database to store inventory and user data.
-
+- SQLAlchemy
 
 ### Installation Steps
 
@@ -73,6 +65,9 @@ To circumvent this, you can
 
 Then put your certificates in the ``src/certs/`` folder and add their filenames in ``server.ini`` under ``Server_Certificate`` and ``Server_Key``
 
+## 2-Factor Authentication
+
+To enable 2FA, go to your user account page and click "Set up 2-Factor Authentication" and follow the steps provided. Right now, 2FA can't be disabled for the user, but the setup page can be revisited in case you need to connect a new authenticator or lost access to the secret token.
 
 ## Functionality
 
