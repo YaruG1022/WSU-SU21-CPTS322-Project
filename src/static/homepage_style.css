@@ -126,7 +126,6 @@ img {
     margin-bottom: 20px;
     display: flex;
     justify-content: center;
-    background-color: lightgray;
     
 }
 
@@ -151,6 +150,7 @@ img {
     margin-right: 5px;
     justify-content: center; 
     float: center;
+    border-radius: 5%;
 
 }
 
@@ -160,7 +160,7 @@ img {
 
 /* Content Styles */
 .content {
-    background-color: lightgray;
+    background-color: WhiteSmoke;
     padding: 20px;
     border-radius: 5px;
     justify-content: center;
