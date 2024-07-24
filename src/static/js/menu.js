@@ -8,3 +8,7 @@ function openMenu(menuId) {
     // Show the selected content
     document.getElementById(menuId).style.display = 'block';
 }
+
+window.onload = function() {
+    openMenu('whatsNew');
+}

@@ -50,14 +50,6 @@ def get_report_data():
         # If the table name is not valid, return an empty response
         return jsonify([])
 
-    conn = get_db_connection()
-    
-    
-
-    if conn is None:
-        # If the database connection fails, return an error response
-        return jsonify({'error': 'Database connection failed'}), 500
-
     try:
         # Fetch column names
         keys = []
@@ -67,13 +59,12 @@ def get_report_data():
             keys = table_name.query.all().keys()
         
         # Query to select all data from the specified table
-        query = f'SELECT * FROM {table_name}'
         data = table_name.query.all()
 
         # Convert the data to a list of dictionaries
         result = {
             'columns': keys,
-            'data': [dict(row) for row in data]
+            'data': [(row.serialize()) for row in data]
         }
         return jsonify(result)
     except Exception as e:
@@ -109,7 +100,10 @@ def generate_report():
 
 
         # Convert the data to a list of dictionaries
-        report_data = [dict(row) for row in data]
+        report_data = []
+        #report_data = [row.serialize() for row in data]
+        for row in data:
+            report_data.append(row.serialize())
         df = pd.DataFrame(report_data)
         
         if export_format == 'csv':

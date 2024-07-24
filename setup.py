@@ -17,6 +17,7 @@ setup(
         'pandas',
         'configparser',
         'pyotp',
-        'qrcode'
+        'qrcode',
+        'xlsxwriter'
     ]
 ) 
