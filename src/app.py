@@ -22,8 +22,8 @@ import configparser
 app = Flask(__name__) # create flask app
 app.register_blueprint(login_bp) # register login blueprint
 app.register_blueprint(interface_bp) # register login blueprint
-#app.register_blueprint(report_bp) # register report blueprint
-#app.register_blueprint(inventory_bp) # register inventory blueprint
+app.register_blueprint(report_bp) # register report blueprint
+app.register_blueprint(inventory_bp) # register inventory blueprint
 
 config = configparser.ConfigParser()
 config.read('server.ini')
