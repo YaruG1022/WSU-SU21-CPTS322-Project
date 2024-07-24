@@ -1,31 +1,37 @@
-﻿{% extends 'interface_base.html' %}
+{% extends 'interface_base.html' %}
 {% block content %}
 <!-- Header -->
-<header style="background-color: #1E90FF;">
-    <div class="slideshow-container">
-        <div class="mySlides fade">
-            <div class="slide-images-container">
-                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 2">
-                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 2">
-                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 3">
-            </div>
-        </div>
+<header >
 
-        <div class="mySlides fade">
-            <div class="slide-images-container">
-                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 4">
-                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 5">
-                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 6">
-            </div>
-        </div>
+</header>
 
-        <div class="mySlides fade">
-            <div class="slide-images-container">
-                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 7">
-                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 8">
-                <img src="static/img/items/default_item.jpg" class="slide-image" alt="Image 9">
-            </div>
+<div class="slideshow-container" style="background-color: lightskyblue;">
+<div class="mySlides fade">
+        <div class="slide-images-container">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 2">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 2">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 3">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 4">
         </div>
+    </div>
+
+    <div class="mySlides fade">
+        <div class="slide-images-container">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 5">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 6">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 7">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 8">
+        </div>
+    </div>
+
+    <div class="mySlides fade">
+        <div class="slide-images-container">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 9">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 10">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 11">
+            <img src="static/img/default_item.jpg" class="slide-image" alt="Image 12">
+        </div>
+    </div>
 
         <a class="prev" onclick="plusSlides(-1)">❮</a>
         <a class="next" onclick="plusSlides(1)">❯</a>
@@ -38,11 +44,22 @@
         </div>
         <br>
     </div>
-</header>
+
+    <a class="prev" onclick="plusSlides(-1)">❮</a>
+    <a class="next" onclick="plusSlides(1)">❯</a>
+    
+    <br>
+    <div style="text-align:center; margin-bottom: 20px;">
+        <span class="dot" onclick="currentSlide(1)"></span> 
+        <span class="dot" onclick="currentSlide(2)"></span> 
+        <span class="dot" onclick="currentSlide(3)"></span> 
+    </div>
+    <br>
+</div>
 
 <body>
     <!-- Main Content -->
-    <div class="main" style="background-color: white;">
+    <div class="main" style="padding-bottom: 10%;">
         <!-- Menu Section -->
         <nav class="menu">
             <ul>
@@ -53,18 +70,26 @@
         </nav>
 
         <!-- Content Section -->
+                <!-- Content Section -->
         <div class="content" style="background-color: lightgray;">
             <div id="whatsNew" class="menu-content">
                 <h2>What's New</h2>
-                <p>Latest updates and news about our food bank...</p>
+                <hr>
+                <p>- User authentication and account management system.</p>
+                <p>- Inventory management functionalities.</p>
+                <p>- Basic reporting system for generating inventory reports.</p>
+                <p>- Add donation and create order systems.</p>
+                <p>- Implemented secure login and registration processes.</p>      
             </div>
             <div id="aboutWebsite" class="menu-content" style="display:none;">
                 <h2>About This Website</h2>
-                <p>Information about the purpose and features of this website...</p>
+                <hr>
+                <p>This website is designed as a management system for ACME food bank.</p>
             </div>
             <div id="aboutUs" class="menu-content" style="display:none;">
                 <h2>About Us</h2>
-                <p>Details about our organization and our mission...</p>
+                <hr>
+                <p>The name of our team is TeamNine.</p>
             </div>
         </div>
     </div>
