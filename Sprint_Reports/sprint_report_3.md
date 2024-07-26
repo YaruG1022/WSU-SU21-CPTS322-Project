@@ -7,10 +7,10 @@
 
 
 ## Work Summary (Developer Facing)
-During this sprint, we collaborated on testing the application. During the process, I identified bugs and made plans to fix them. My team member made great contributions in fixing the bugs and also improved the management system. Additionally, I updated the UI design slightly.
+During this sprint, our team focused heavily on testing the application. Throughout this process, I personally identified several bugs and developed plans to address them. My team members played a crucial role in fixing these bugs and making significant improvements in data management. In addition, I made some updates to the design to enhance visual experience.
 
 ## Unfinished Work
-In this sprint, we were unable to complete the additional features that we planned as optional tasks due to time constraints.
+Unfortunately, due to time constraints, we were unable to complete the additional features that we had initially planned as optional tasks for this sprint. These features will be considered for future development cycles.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
@@ -22,7 +22,7 @@ Here are links to the issues that we completed in this sprint:
 ## Incomplete Issues/User Stories
 Here are links to issues we worked on but did not complete in this sprint:
 
- * [Additional features (optional)](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/23) - We ran out of time to implement the optional functionalities.
+ * [Additional features (optional)](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/issues/23) - We did not have enough time to implement these optional functionalities so we gave up on it.
 
 ## Code Files for Review
 Please review the following code files, which were actively developed during this sprint, for quality:
@@ -30,7 +30,7 @@ Please review the following code files, which were actively developed during thi
  * [Backend/src](https://github.com/YaruG1022/WSU-SU21-CPTS322-Project/tree/ccd3fc07a882a14aa88f8ce73783aed0cf34ec80/src)
  
 ## Retrospective Summary
-In this sprint, we focused on testing the application and fixing bugs, ensuring all the functionalities work properly. Although this is the last sprint, some good ideas couldn't be implemented due to time constraints, but we may make more improvements and changes in future work.
+In this sprint, we dedicated a substantial amount of effort to testing the application and resolving bugs to ensure that all functionalities are working correctly. This being the last sprint, we faced some time limitations that prevented us from implementing all the innovative ideas we had. However, we hope to incorporate these improvements in future updates.
 
 Here's what went well:
   * Completed most of the vital implementations of the management system for the application.
