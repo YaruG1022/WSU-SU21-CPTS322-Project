@@ -11,7 +11,7 @@ Client Demo: https://www.youtube.com/watch?v=v11rOPA3P9I
 During this sprint, our team focused heavily on testing the application. Throughout this process, I personally identified several bugs and developed plans to address them. My team members played a crucial role in fixing these bugs and making significant improvements in data management. In addition, I made some updates to the design to enhance visual experience.
 
 ## Unfinished Work
-Unfortunately, due to time constraints, we were unable to complete the additional features that we had initially planned as optional tasks for this sprint. These features will be considered for future development cycles.
+Unfortunately, due to time constraints, we were unable to complete the additional features that we had initially planned as optional tasks for this sprint. These features will be considered for future development.
 
 ## Completed Issues/User Stories
 Here are links to the issues that we completed in this sprint:
@@ -42,7 +42,7 @@ Here's what we'd like to improve:
    * Usability, reliability, efficiency, and convenience of the application.
    * Security of operations, data, and access.
 
-Here are changes we plan to implement in the next sprint:
+Here are changes we plan to implement in future work:
    * Data Graphs: Develop statistical graphs to visualize data trends and tendencies for better insights and decision-making.
    * Communication: Implement communication features to facilitate interaction between donors and recipients.
    * Notifications: Add notification functionality to alert users about new donations, orders, and messages.
