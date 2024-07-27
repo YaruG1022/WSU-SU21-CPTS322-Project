@@ -74,12 +74,12 @@ To enable 2FA, go to your user account page and click "Set up 2-Factor Authentic
 To use the Acme Food Bank Inventory Tracking System, follow these steps:
 
 1. **Log In/Sign Up**: Users can sign up for a new account or log in to an existing one.
-2. **Dashboard**: Upon logging in, users are taken to the dashboard which provides an overview of inventory levels, recent donations, and upcoming expirations.
+2. **Homepage**: Upon logging in, users are taken to the dashboard which provides an overview of general information.
 3. **Add New Donation**: Navigate to the "Add Donation" page to enter details of new donations and update the inventory.
 4. **Update Inventory**: Modify existing inventory items by navigating to the "Update Inventory" page.
 5. **Generate Report**: Create customized reports by selecting the desired parameters on the "Generate Report" page.
-6. **Receive Notifications**: Get alerts about items nearing their expiration dates.
 7. **Recipient Orders**: Recipients can place their demand requests, which are processed by the system.
+8. **User Center**: Users can costumize their avatar and change their username, email address and password.
 
 
 ## Known Problems
